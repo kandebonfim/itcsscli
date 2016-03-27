@@ -5,12 +5,13 @@ require 'fileutils'
 module ItcssCli
   class Init
 
-    ITCSS_DIR = 'stylesheets'
+    ITCSS_DIR = "stylesheets"
+    ITCSS_FILE_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_file.erb"))
 
     def command
       ARGV.each do |arg|
 
-        File.open("templates/itcss_file.erb") do |io|
+        File.open ITCSS_FILE_TEMPLATE do |io|
           template = ERB.new io.read
 
           files = {
