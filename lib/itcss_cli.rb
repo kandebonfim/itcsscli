@@ -96,14 +96,15 @@ module ItcssCli
       FileUtils.mkdir_p ITCSS_DIR
       FileUtils.mkdir_p "#{ITCSS_DIR}/#{type}"
 
-      unless File.exist?("#{ITCSS_DIR}/#{type}/_#{type}.#{file}.sass")
+      file_path = "#{ITCSS_DIR}/#{type}/_#{type}.#{file}.sass"
+      unless File.exist?(file_path)
         contents = "##{type}.#{file}"
-        File.open "#{ITCSS_DIR}/#{type}/_#{type}.#{file}.sass", "w+" do |out|
+        File.open file_path, "w+" do |out|
           out.puts template.result binding
         end
-        puts "create /#{type}/_#{type}.#{file}.sass".green
+        puts "create #{file_path}".green
       else
-        puts "/#{type}/_#{type}.#{file}.sass is already created. Please delete it if you want it to be rewritten.".red
+        puts "#{file_path} is already created. Please delete it if you want it to be rewritten.".red
         abort
       end
     end
@@ -111,16 +112,17 @@ module ItcssCli
     def generate_base_file
       itcss_files = Dir[ File.join(ITCSS_DIR, '**', '*') ].reject { |p| File.directory? p }
 
+      file_path = "#{ITCSS_DIR}/#{ITCSS_BASE_FILE}.sass"
+      contents = "#{ITCSS_BASE_FILE}.sass"
       File.open ITCSS_APP_TEMPLATE do |io|
         template = ERB.new io.read
 
-        contents = "#{ITCSS_BASE_FILE}.sass"
-        File.open "#{ITCSS_DIR}/#{ITCSS_BASE_FILE}.sass", "w+" do |out|
+        File.open file_path, "w+" do |out|
           out.puts template.result binding
         end
       end
 
-      puts "update #{ITCSS_BASE_FILE}.sass".blue
+      puts "update #{file_path}".blue
     end
 
   end
