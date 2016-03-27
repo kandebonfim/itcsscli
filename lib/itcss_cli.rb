@@ -7,6 +7,7 @@ module ItcssCli
 
     ITCSS_DIR = "stylesheets"
     ITCSS_MODULE_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_module.erb"))
+    ITCSS_APP_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_application.erb"))
     ITCSS_FILES = ["settings", "tools", "generic", "base", "objects", "components", "trumps"]
 
     def command_parser
@@ -17,6 +18,8 @@ module ItcssCli
       elsif ARGV[0] == 'new' && ARGV[1] && ARGV[2]           # $ itcss new components buttons
         new_itcss_module(ARGV[1], ARGV[2])
       end
+
+      generate_base_file
     end
 
     def new_itcss_basic_structure
@@ -43,6 +46,19 @@ module ItcssCli
       contents = "##{type}.#{file}"
       File.open "#{ITCSS_DIR}/#{type}/_#{type}.#{file}.sass", "w+" do |out|
         out.puts template.result binding
+      end
+    end
+
+    def generate_base_file
+      itcss_files = Dir[ File.join(ITCSS_DIR, '**', '*') ].reject { |p| File.directory? p }
+
+      File.open ITCSS_APP_TEMPLATE do |io|
+        template = ERB.new io.read
+
+        contents = "application.sass"
+        File.open "#{ITCSS_DIR}/application.sass", "w+" do |out|
+          out.puts template.result binding
+        end
       end
     end
 

@@ -1,0 +1,6 @@
+<%= "// " + "=" * 40 %>
+<%= "//   " + contents %>
+<%= "// " + "=" * 40 %>
+<% itcss_files.each do |file| %>
+@import "<%= file.sub! "#{ITCSS_DIR}/", '' %>"
+<% end %>
