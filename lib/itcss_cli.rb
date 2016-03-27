@@ -27,6 +27,9 @@ module ItcssCli
         occur = ITCSS_FILES.each_index.select{|i| ITCSS_FILES[i].include? ARGV[1]}
         if occur.size == 1
           new_itcss_module(ITCSS_FILES[occur[0]], ARGV[2])
+        else
+          puts "'#{ARGV[1]}' is not an ITCSS module. Try settings, tools, generic, base, objects, components or trumps.".red
+          abort
         end
       end
 
