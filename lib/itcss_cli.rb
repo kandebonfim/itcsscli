@@ -17,7 +17,6 @@ module ItcssCli
       ITCSS_CONFIG = YAML.load_file(ITCSS_CONFIG_FILE)
       ITCSS_CONFIG['stylesheets_directory'].nil? ? ITCSS_DIR = nil : ITCSS_DIR = ITCSS_CONFIG['stylesheets_directory']
       ITCSS_CONFIG['stylesheets_import_file'].nil? ? ITCSS_BASE_FILE = nil : ITCSS_BASE_FILE = ITCSS_CONFIG['stylesheets_import_file']
-      File.chmod(777, ITCSS_DIR)
     else
       ITCSS_CONFIG = nil
     end
@@ -96,6 +95,7 @@ module ItcssCli
     def new_itcss_file(type, file, template)
       FileUtils.mkdir_p ITCSS_DIR
       FileUtils.mkdir_p "#{ITCSS_DIR}/#{type}"
+      FileUtils.chmod()
 
       file_path = "#{ITCSS_DIR}/#{type}/_#{type}.#{file}.sass"
       unless File.exist?(file_path)
