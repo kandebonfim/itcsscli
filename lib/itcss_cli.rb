@@ -6,19 +6,30 @@ module ItcssCli
   class Init
 
     ITCSS_DIR = "stylesheets"
+    ITCSS_BASE_FILE = "application"
     ITCSS_MODULE_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_module.erb"))
     ITCSS_APP_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_application.erb"))
     ITCSS_FILES = ["settings", "tools", "generic", "base", "objects", "components", "trumps"]
 
     def command_parser
-      if ARGV[0] == 'init'                                   # $ itcss init
+      # $ itcss init
+      if ARGV[0] == 'init'
 
-      elsif ARGV[0] == 'install' && ARGV[1] == 'example'     # $ itcss install example
+
+      # $ itcss install example
+      elsif ARGV[0] == 'install' && ARGV[1] == 'example'
         new_itcss_basic_structure
-      elsif ARGV[0] == 'new' && ARGV[1] && ARGV[2]           # $ itcss new components buttons
-        new_itcss_module(ARGV[1], ARGV[2])
+
+
+      # $ itcss new components buttons
+      elsif ARGV[0] == 'new' && ARGV[1] && ARGV[2]
+        occur = ITCSS_FILES.each_index.select{|i| ITCSS_FILES[i].include? ARGV[1]}
+        if occur.size == 1
+          new_itcss_module(ITCSS_FILES[occur[0]], ARGV[2])
+        end
       end
 
+      # Enable ITCSS_BASE_FILE to import all itcss dependencies
       generate_base_file
     end
 
