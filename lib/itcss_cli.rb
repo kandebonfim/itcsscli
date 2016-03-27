@@ -51,10 +51,11 @@ module ItcssCli
           puts "'#{ARGV[1]}' is not an ITCSS module. Try settings, tools, generic, base, objects, components or trumps.".red
           abort
         end
-      end
 
-      # Enable ITCSS_BASE_FILE to import all itcss dependencies
-      generate_base_file
+      # $ itcss update
+      elsif ARGV[0] == 'install' || ARGV[0] == 'new' || ARGV[0] == 'update'
+        generate_base_file
+      end
     end
 
     def init_itcss_config_file
@@ -107,6 +108,18 @@ module ItcssCli
     end
 
     def generate_base_file
+      itcss_files = Dir[ File.join(ITCSS_DIR, '**', '*') ].reject { |p| File.directory? p }
+
+      File.open ITCSS_APP_TEMPLATE do |io|
+        template = ERB.new io.read
+
+        contents = "#{ITCSS_BASE_FILE}.sass"
+        File.open "#{ITCSS_DIR}/#{ITCSS_BASE_FILE}.sass", "w+" do |out|
+          out.puts template.result binding
+        end
+      end
+
+      puts "update #{ITCSS_BASE_FILE}.sass".blue
     end
 
   end
