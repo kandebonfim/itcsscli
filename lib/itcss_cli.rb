@@ -6,7 +6,7 @@ module ItcssCli
   class Init
 
     ITCSS_DIR = "stylesheets"
-    ITCSS_FILE_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_file.erb"))
+    ITCSS_MODULE_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_module.erb"))
     ITCSS_FILES = ["settings", "tools", "generic", "base", "objects", "components", "trumps"]
 
     def command_parser
@@ -20,7 +20,7 @@ module ItcssCli
     end
 
     def new_itcss_basic_structure
-      File.open ITCSS_FILE_TEMPLATE do |io|
+      File.open ITCSS_MODULE_TEMPLATE do |io|
         template = ERB.new io.read
 
         ITCSS_FILES.each do |file|
@@ -30,7 +30,7 @@ module ItcssCli
     end
 
     def new_itcss_module(type, file)
-      File.open ITCSS_FILE_TEMPLATE do |io|
+      File.open ITCSS_MODULE_TEMPLATE do |io|
         template = ERB.new io.read
           new_itcss_file(type, file, template)
       end
