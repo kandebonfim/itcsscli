@@ -51,9 +51,10 @@ module ItcssCli
           puts "'#{ARGV[1]}' is not an ITCSS module. Try settings, tools, generic, base, objects, components or trumps.".red
           abort
         end
+      end
 
       # $ itcss update
-      elsif ARGV[0] == 'install' || ARGV[0] == 'new' || ARGV[0] == 'update'
+      if ARGV[0] == 'install' || ARGV[0] == 'new' || ARGV[0] == 'update'
         generate_base_file
       end
     end
