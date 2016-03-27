@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'itcss_cli'
+
+init = ItcssCli::Init.new
+init.command
