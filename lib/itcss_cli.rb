@@ -1,6 +1,7 @@
 require "itcss_cli/version"
 require "erb"
 require 'fileutils'
+require 'colorize'
 
 module ItcssCli
   class Init
@@ -58,6 +59,8 @@ module ItcssCli
       File.open "#{ITCSS_DIR}/#{type}/_#{type}.#{file}.sass", "w+" do |out|
         out.puts template.result binding
       end
+
+      puts "create /#{type}/_#{type}.#{file}.sass".green
     end
 
     def generate_base_file
