@@ -58,12 +58,16 @@ module ItcssCli
       FileUtils.mkdir_p ITCSS_DIR
       FileUtils.mkdir_p "#{ITCSS_DIR}/#{type}"
 
-      contents = "##{type}.#{file}"
-      File.open "#{ITCSS_DIR}/#{type}/_#{type}.#{file}.sass", "w+" do |out|
-        out.puts template.result binding
+      unless File.exist?("#{ITCSS_DIR}/#{type}/_#{type}.#{file}.sass")
+        contents = "##{type}.#{file}"
+        File.open "#{ITCSS_DIR}/#{type}/_#{type}.#{file}.sass", "w+" do |out|
+          out.puts template.result binding
+        end
+        puts "create /#{type}/_#{type}.#{file}.sass".green
+      else
+        puts "/#{type}/_#{type}.#{file}.sass is already created. Please delete it if you want it to be rewritten.".red
+        abort
       end
-
-      puts "create /#{type}/_#{type}.#{file}.sass".green
     end
 
     def generate_base_file
