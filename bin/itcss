@@ -3,4 +3,4 @@
 require 'itcss_cli'
 
 init = ItcssCli::Init.new
-init.command
+init.command_parser
