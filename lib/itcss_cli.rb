@@ -74,6 +74,8 @@ module ItcssCli
           out.puts template.result binding
         end
       end
+
+      puts "update #{ITCSS_BASE_FILE}.sass".blue
     end
 
   end
