@@ -1,9 +1,3 @@
-# ItcssCli
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/itcss_cli`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -22,7 +16,102 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+First, you'll need to set up ITCSS by running:
+
+    $ itcss init
+    
+Now go to `itcss.yml` and define define where Itcss_cli should create the ITCSS structure and the name of it's base file:
+
+```yml
+# Provide the root folder where the ITCSS file structure should be built.
+stylesheets_directory: 'source/assets/stylesheets'
+
+# Provide your base sass file (all ITCSS modules will be imported in it).
+stylesheets_import_file: 'application.css'
+```
+
+Go ahead and grow your ITCSS structure:
+```{r, engine='bash'}
+$ itcss new component modals
+create source/stylesheets/components/_components.modals.sass
+update source/stylesheets/application.css.sass
+
+$ itcss new trumps helpers
+create source/stylesheets/trumps/_trumps.helpers.sass
+update source/stylesheets/application.css.sass
+```
+
+## Example
+Creating a full ITCSS structure:
+
+```{r, engine='bash'}
+$ itcss init
+create itcss.yml
+Well done! Please do your own configurations in itcss.yml.
+
+[[[ Open the `itcss.yml` file and edit it. ]]]
+
+$ itcss install example
+create source/stylesheets/settings/_settings.example.sass
+create source/stylesheets/tools/_tools.example.sass
+create source/stylesheets/generic/_generic.example.sass
+create source/stylesheets/base/_base.example.sass
+create source/stylesheets/objects/_objects.example.sass
+create source/stylesheets/components/_components.example.sass
+create source/stylesheets/trumps/_trumps.example.sass
+update source/stylesheets/application.css.sass
+```
+
+If you open the ITCSS's base file now, you'll see that all ITCSS modules are automatically imported into it:
+```sass
+@charset "utf-8"
+
+// ========================================
+//   application.css.sass
+// ========================================
+
+
+// [0] Requirements --- Vendor libraries
+// [1] Settings ------- Sass vars, etc.
+// [2] Tools ---------- Functions and mixins.
+// [3] Generic -------- Generic, high-level styling, like resets, etc.
+// [4] Base ----------- Unclasses HTML elements (e.g. `h2`, `ul`).
+// [5] Objects -------- Objects and abstractions.
+// [6] Components ----- Your designed UI elements (inuitcss includes none of these).
+// [7] Trumps --------- Overrides and helper classes.
+
+// ↓ ITCSS_CLI FILE IMPORTING ↓
+
+// [0] Settings
+@import "settings/_settings.example.sass"
+
+
+// [1] Tools
+@import "tools/_tools.example.sass"
+
+
+// [2] Generic
+@import "generic/_generic.example.sass"
+
+
+// [3] Base
+@import "base/_base.example.sass"
+
+
+// [4] Objects
+@import "objects/_objects.example.sass"
+
+
+// [5] Components
+@import "components/_components.example.sass"
+
+
+// [6] Trumps
+@import "trumps/_trumps.example.sass"
+
+
+// ↑ ITCSS_CLI FILE IMPORTING ↑
+```
 
 ## Development
 
