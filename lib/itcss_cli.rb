@@ -95,7 +95,7 @@ module ItcssCli
     def new_itcss_file(type, file, template)
       FileUtils.mkdir_p ITCSS_DIR
       FileUtils.mkdir_p "#{ITCSS_DIR}/#{type}"
-      FileUtils.chmod()
+      FileUtils.chmod "u=wrx,go=rx", ITCSS_DIR
 
       file_path = "#{ITCSS_DIR}/#{type}/_#{type}.#{file}.sass"
       unless File.exist?(file_path)
