@@ -35,6 +35,12 @@ module ItcssCli
       if ITCSS_CONFIG.nil?
         puts "There's no #{ITCSS_CONFIG_FILE} created yet. Run `itcss init` to create it.".red
         abort
+      elsif ITCSS_DIR.nil? || ITCSS_BASE_FILE.nil?
+        puts "Something is wrong with your itcss.yml file. Please delete it and run `itcss init` again.".red
+        abort
+      elsif ITCSS_DIR == 'TODO' || ITCSS_BASE_FILE == 'TODO'
+        puts "You haven't done the itcss_cli's configuration. You must provide your directories settings in itcss.yml.".yellow
+        abort
       end
     end
 
@@ -65,6 +71,7 @@ module ItcssCli
 
       # $ itcss update
       if ARGV[0] == 'install' || ARGV[0] == 'new' || ARGV[0] == 'update'
+        init_checker
         generate_base_file
       end
     end
@@ -79,6 +86,7 @@ module ItcssCli
           end
         end
         puts "create #{ITCSS_CONFIG_FILE}".green
+        puts "Well done! Please do your own configurations in itcss.yml.".yellow
       else
         puts "#{ITCSS_CONFIG_FILE} already exists.".red
         abort
