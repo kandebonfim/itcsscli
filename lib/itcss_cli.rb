@@ -23,6 +23,14 @@ module ItcssCli
       "trumps" => "Overrides and helper classes."
     }
 
+    ITCSS_COMMANDS = [
+      "itcss init                       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
+      "itcss install example            | Creates an example of ITCSS structure in path specified in itcss.yml.",
+      "itcss new [module] [filename]    | Creates a new ITCSS module and automatically import it into imports file.",
+      "itcss update                     | Updates the imports file using the files inside ITCSS structure.",
+      "itcss help                       | Shows all available itcss commands and it's functions."
+    ]
+
     if File.exist?(ITCSS_CONFIG_FILE)
       ITCSS_CONFIG = YAML.load_file(ITCSS_CONFIG_FILE)
       ITCSS_CONFIG['stylesheets_directory'].nil? ? ITCSS_DIR = nil : ITCSS_DIR = ITCSS_CONFIG['stylesheets_directory']
@@ -67,6 +75,11 @@ module ItcssCli
           puts "'#{ARGV[1]}' is not an ITCSS module. Try settings, tools, generic, base, objects, components or trumps.".red
           abort
         end
+
+
+      # $ itcss help
+      elsif ARGV[0] == 'help'
+        itcss_help
       end
 
       # $ itcss update
@@ -148,6 +161,11 @@ module ItcssCli
       end
 
       puts "update #{file_path}".blue
+    end
+
+    def itcss_help
+      puts "itcss_cli available commmands:".yellow
+      puts ITCSS_COMMANDS.map{|s| s.prepend("  ")}
     end
 
   end
