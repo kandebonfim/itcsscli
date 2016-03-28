@@ -28,7 +28,8 @@ module ItcssCli
       "itcss install example            | Creates an example of ITCSS structure in path specified in itcss.yml.",
       "itcss new [module] [filename]    | Creates a new ITCSS module and automatically import it into imports file.",
       "itcss update                     | Updates the imports file using the files inside ITCSS structure.",
-      "itcss help                       | Shows all available itcss commands and it's functions."
+      "itcss help                       | Shows all available itcss commands and it's functions.",
+      "itcss version                    | Shows itcss_cli gem version installed. [short-cut alias: '-v', 'v']"
     ]
 
     if File.exist?(ITCSS_CONFIG_FILE)
@@ -80,6 +81,11 @@ module ItcssCli
       # $ itcss help
       elsif ARGV[0] == 'help'
         itcss_help
+
+
+      # $ itcss version
+      elsif ARGV[0] == 'version' || ARGV[0] == '-v' || ARGV[0] == 'v'
+        itcss_version
       end
 
       # $ itcss update
@@ -166,6 +172,10 @@ module ItcssCli
     def itcss_help
       puts "itcss_cli available commmands:".yellow
       puts ITCSS_COMMANDS.map{|s| s.prepend("  ")}
+    end
+
+    def itcss_version
+      puts VERSION
     end
 
   end
