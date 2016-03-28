@@ -11,7 +11,17 @@ module ItcssCli
     ITCSS_CONFIG_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_config.erb"))
     ITCSS_MODULE_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_module.erb"))
     ITCSS_APP_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_application.erb"))
-    ITCSS_FILES = ["settings", "tools", "generic", "base", "objects", "components", "trumps"]
+    ITCSS_MODULES = ["settings", "tools", "generic", "base", "objects", "components", "trumps"]
+    ITCSS_FILES = {
+      "requirements" => "Vendor libraries",
+      "settings" => "Sass vars, etc.",
+      "tools" => "Functions and mixins.",
+      "generic" => "Generic, high-level styling, like resets, etc.",
+      "base" => "Unclasses HTML elements (e.g. `h2`, `ul`).",
+      "objects" => "Objects and abstractions.",
+      "components" => "Your designed UI elements (inuitcss includes none of these).",
+      "trumps" => "Overrides and helper classes."
+    }
 
     if File.exist?(ITCSS_CONFIG_FILE)
       ITCSS_CONFIG = YAML.load_file(ITCSS_CONFIG_FILE)
@@ -44,9 +54,9 @@ module ItcssCli
       elsif ARGV[0] == 'new' && ARGV[1] && ARGV[2]
         init_checker
 
-        occur = ITCSS_FILES.each_index.select{|i| ITCSS_FILES[i].include? ARGV[1]}
+        occur = ITCSS_MODULES.each_index.select{|i| ITCSS_MODULES[i].include? ARGV[1]}
         if occur.size == 1
-          new_itcss_module(ITCSS_FILES[occur[0]], ARGV[2])
+          new_itcss_module(ITCSS_MODULES[occur[0]], ARGV[2])
         else
           puts "'#{ARGV[1]}' is not an ITCSS module. Try settings, tools, generic, base, objects, components or trumps.".red
           abort
@@ -79,7 +89,7 @@ module ItcssCli
       File.open ITCSS_MODULE_TEMPLATE do |io|
         template = ERB.new io.read
 
-        ITCSS_FILES.each do |file|
+        ITCSS_MODULES.each do |file|
           new_itcss_file(file, 'example', template)
         end
       end
@@ -111,7 +121,13 @@ module ItcssCli
     end
 
     def generate_base_file
-      itcss_files = Dir[ File.join(ITCSS_DIR, '**', '*') ].reject { |p| File.directory? p }
+      FileUtils.mkdir_p ITCSS_DIR
+
+      itcss_files_to_import = {}
+      ITCSS_MODULES.each do |current_module|
+        itcss_module_files = Dir[ File.join("#{ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
+        itcss_files_to_import[current_module] = itcss_module_files.map{|s| s.gsub("#{ITCSS_DIR}/", '')}
+      end
 
       file_path = "#{ITCSS_DIR}/#{ITCSS_BASE_FILE}.sass"
       contents = "#{ITCSS_BASE_FILE}.sass"
