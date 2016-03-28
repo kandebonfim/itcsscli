@@ -7,8 +7,10 @@
 <% ITCSS_FILES.each_with_index do |value, index| %>
 // [<%= index %>] <%= value[0].slice(0,1).capitalize + value[0].slice(1..-1) + " " + "-" *  (15-value[0].length) + " " + value[1] %><% end %>
 
-<% itcss_files_to_import.each_with_index do |value, index| %>
+// ↓ ITCSS_CLI FILE IMPORTING ↓
+<% itcss_files_to_import.each_with_index do |value, index| if value[1].length > 1 %>
 // [<%= index %>] <%= value[0].slice(0,1).capitalize + value[0].slice(1..-1) %>
 <% value[1].each do |file_path| %>@import "<%= file_path %>"
 <% end %>
-<% end %>
+<% end end %>
+// ↑ ITCSS_CLI FILE IMPORTING ↑
