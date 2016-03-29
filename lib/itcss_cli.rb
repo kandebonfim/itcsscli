@@ -100,6 +100,9 @@ module ItcssCli
         File.open ITCSS_CONFIG_TEMPLATE do |io|
           template = ERB.new io.read
 
+          config_file = File.expand_path(File.join(File.dirname(__FILE__), '../templates/itcss_config.yml'))
+          content = YAML.load_file(config_file).to_yaml
+
           File.open ITCSS_CONFIG_FILE, "w+" do |out|
             out.puts template.result binding
           end
