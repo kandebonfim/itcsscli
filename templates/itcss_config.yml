@@ -1,7 +1,2 @@
 stylesheets_directory: TODO
 stylesheets_import_file: TODO
-package_management: bower
-inuit_modules:
-- module: tools.functions
-- module: settings.defaults
-- module: base.page
