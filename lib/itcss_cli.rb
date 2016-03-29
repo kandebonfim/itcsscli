@@ -65,8 +65,8 @@ module ItcssCli
         new_itcss_basic_structure
 
 
-      # $ itcss new components buttons
-      elsif ARGV[0] == 'new' && ARGV[1] && ARGV[2]
+      # $ itcss new||n [module] [filename]
+      elsif ARGV[0] == 'new' && ARGV[1] && ARGV[2] || ARGV[0] == 'n' && ARGV[1] && ARGV[2]
         init_checker
 
         occur = ITCSS_MODULES.each_index.select{|i| ITCSS_MODULES[i].include? ARGV[1]}
