@@ -34,9 +34,9 @@ module ItcssCli
 
     if File.exist?(ITCSS_CONFIG_FILE)
       ITCSS_CONFIG = YAML.load_file(ITCSS_CONFIG_FILE)
-      ITCSS_CONFIG['stylesheets_directory'].nil? ? ITCSS_DIR = nil : ITCSS_DIR = ITCSS_CONFIG['stylesheets_directory']
-      ITCSS_CONFIG['stylesheets_import_file'].nil? ? ITCSS_BASE_FILE = nil : ITCSS_BASE_FILE = ITCSS_CONFIG['stylesheets_import_file']
-      ITCSS_CONFIG['package_management'].nil? ? ITCSS_PACKAGE_MANAGEMENT = nil : ITCSS_PACKAGE_MANAGEMENT = ITCSS_CONFIG['package_management']
+      ITCSS_DIR ||= ITCSS_CONFIG['stylesheets_directory']
+      ITCSS_BASE_FILE ||= ITCSS_CONFIG['stylesheets_import_file']
+      ITCSS_PACKAGE_MANAGEMENT ||= ITCSS_CONFIG['package_management']
     else
       ITCSS_CONFIG = nil
     end
