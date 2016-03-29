@@ -11,7 +11,7 @@ module ItcssCli
     ITCSS_CONFIG_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_config.erb"))
     ITCSS_MODULE_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_module.erb"))
     ITCSS_APP_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_application.erb"))
-    ITCSS_MODULES = ["settings", "tools", "generic", "base", "objects", "components", "trumps"]
+    ITCSS_MODULES = ["requirements", "settings", "tools", "generic", "base", "objects", "components", "trumps"]
     ITCSS_FILES = {
       "requirements" => "Vendor libraries",
       "settings" => "Sass vars, etc.",
