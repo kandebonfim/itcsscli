@@ -2,10 +2,15 @@
 <%= "#   #itcss.yml" %>
 <%= "# " + "=" * 40 %>
 
-# Provide your base sass file (all ITCSS modules will be imported in it).
-# Provide the root folder where the ITCSS file structure should be builded.
-<%= content %>
-<% unless first_init.nil? %># Uncomment enable inuit modules importing
+# Root folder where the ITCSS file structure should be builded.
+stylesheets_directory: path/to/itcss/root
+
+# Base sass file (all ITCSS modules will be imported in it).
+stylesheets_import_file: yourapplication
+
+<% unless first_init.nil? %># Enable inuit modules importing
+# package_manager: bower
+
 # inuit_modules:
 #   - tools.functions
 #   - settings.defaults

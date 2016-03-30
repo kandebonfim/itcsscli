@@ -104,9 +104,6 @@ module ItcssCli
       unless File.exist?(@ITCSS_CONFIG_FILE)
         File.open @ITCSS_CONFIG_TEMPLATE do |io|
           template = ERB.new io.read
-
-          config_file = relative_file_path '../templates/itcss_config.yml'
-          content = YAML.load_file(config_file).to_yaml
           first_init = true
 
           File.open @ITCSS_CONFIG_FILE, "w+" do |out|
@@ -197,7 +194,7 @@ module ItcssCli
       elsif @ITCSS_DIR.nil? || @ITCSS_BASE_FILE.nil?
         puts "Something is wrong with your itcss.yml file. Please delete it and run `itcss init` again.".red
         abort
-      elsif @ITCSS_DIR == 'TODO' || @ITCSS_BASE_FILE == 'TODO'
+      elsif @ITCSS_DIR == 'path/to/itcss/root' || @ITCSS_BASE_FILE == 'yourapplication'
         puts "You haven't done the itcss_cli's configuration. You must provide your directories settings in itcss.yml.".yellow
         abort
       end
