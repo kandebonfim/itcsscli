@@ -24,6 +24,8 @@ module ItcssCli
         "trumps" => "Overrides and helper classes."
       }
 
+      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'update', 'u', 'help', 'h', '-h', 'version', 'v', '-v']
+
       @ITCSS_COMMANDS_DESCRIPTION = [
         "             COMMAND            ALIAS                               FUNCTION                                 ",
         "itcss init                    |       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
@@ -33,8 +35,6 @@ module ItcssCli
         "itcss help                    | h, -h | Shows all available itcss commands and it's functions.",
         "itcss version                 | v, -v | Shows itcss_cli gem version installed."
       ]
-
-      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'update', 'u', 'help', 'h', '-h', 'version', 'v', '-v']
 
       if File.exist?(@ITCSS_CONFIG_FILE)
         @ITCSS_CONFIG = YAML.load_file(@ITCSS_CONFIG_FILE)
@@ -49,8 +49,7 @@ module ItcssCli
     def command_parser
       # Not a valid command
       unless @ITCSS_COMMANDS.include? ARGV[0]
-        puts "#{current_full_command} is not a valid command. Check out the available commands:".red
-        itcss_help
+        not_a_valid_command
       end
 
       # $ itcss init
@@ -65,15 +64,12 @@ module ItcssCli
 
 
       # $ itcss new||n [module] [filename]
-      elsif ['new', 'n'].include? ARGV[0] && ARGV[1] && ARGV[2]
-        itcss_init_checker
-
-        occur = @ITCSS_MODULES.each_index.select{|i| @ITCSS_MODULES[i].include? ARGV[1]}
-        if occur.size == 1
-          itcss_new_module(@ITCSS_MODULES[occur[0]], ARGV[2])
+      elsif ['new', 'n'].include? ARGV[0]
+        if find_valid_module ARGV[1] && ARGV[2]
+          itcss_init_checker
+          itcss_new_module(find_valid_module(ARGV[1]), ARGV[2])
         else
-          puts "'#{ARGV[1]}' is not an ITCSS module. Try settings, tools, generic, base, objects, components or trumps.".red
-          abort
+          not_a_valid_command
         end
 
 
@@ -209,6 +205,22 @@ module ItcssCli
 
     def current_full_command
       "`itcss_cli #{ARGV.join(' ')}`"
+    end
+
+    def not_a_valid_command
+      puts "#{current_full_command} is not a valid command. Check out the available commands:".red
+      itcss_help
+      abort
+    end
+
+    def find_valid_module(arg)
+      occur = @ITCSS_MODULES.each_index.select{|i| @ITCSS_MODULES[i].include? arg}
+      if occur.size == 1
+        return occur[0]
+      else
+        puts "'#{ARGV[1]}' is not an ITCSS module. Try #{@ITCSS_MODULES.join(', ')}.".red
+        abort
+      end
     end
 
   end
