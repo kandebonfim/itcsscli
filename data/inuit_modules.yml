@@ -1,3 +1,53 @@
+settings.defaults:
+  name: settings.defaults
+  slug: inuit-defaults
+  repo: github.com/inuitcss/settings.defaults
+  desc: inuitcss’ default settings
+settings.responsive:
+  name: settings.responsive
+  slug: inuit-responsive-settings
+  repo: github.com/inuitcss/settings.responsive
+  desc: ---
+tools.functions:
+  name: tools.functions
+  slug: inuit-functions
+  repo: github.com/inuitcss/tools.functions
+  desc: inuitcss’ default functions
+tools.mixins:
+  name: tools.mixins
+  slug: inuit-mixins
+  repo: github.com/inuitcss/tools.mixins
+  desc: inuitcss’ default mixins
+tools.responsive:
+  name: tools.responsive
+  slug: inuit-responsive-tools
+  repo: github.com/inuitcss/tools.responsive
+  desc: ---
+tools.widths:
+  name: tools.widths
+  slug: inuit-tools-widths
+  repo: github.com/inuitcss/tools.widths
+  desc: inuitcss width classes generator
+generic.box-sizing:
+  name: generic.box-sizing
+  slug: inuit-box-sizing
+  repo: github.com/inuitcss/generic.box-sizing
+  desc: Global box-sizing options.
+generic.normalize:
+  name: generic.normalize
+  slug: inuit-normalize
+  repo: github.com/inuitcss/generic.normalize
+  desc: "@necolas’ normalize.css."
+generic.reset:
+  name: generic.reset
+  slug: inuit-reset
+  repo: github.com/inuitcss/generic.reset
+  desc: Basic reset to complement normalize.css.
+generic.shared:
+  name: generic.shared
+  slug: inuit-shared
+  repo: github.com/inuitcss/generic.shared
+  desc: High-level styling across shared rulesets
 base.headings:
   name: base.headings
   slug: inuit-headings
@@ -23,26 +73,6 @@ base.paragraphs:
   slug: inuit-paragraphs
   repo: github.com/inuitcss/base.paragraphs
   desc: Simple paragraph styles
-generic.box-sizing:
-  name: generic.box-sizing
-  slug: inuit-box-sizing
-  repo: github.com/inuitcss/generic.box-sizing
-  desc: Global box-sizing options.
-generic.normalize:
-  name: generic.normalize
-  slug: inuit-normalize
-  repo: github.com/inuitcss/generic.normalize
-  desc: "@necolas’ normalize.css."
-generic.reset:
-  name: generic.reset
-  slug: inuit-reset
-  repo: github.com/inuitcss/generic.reset
-  desc: Basic reset to complement normalize.css.
-generic.shared:
-  name: generic.shared
-  slug: inuit-shared
-  repo: github.com/inuitcss/generic.shared
-  desc: High-level styling across shared rulesets
 objects.block:
   name: objects.block
   slug: inuit-block
@@ -108,36 +138,6 @@ objects.tabs:
   slug: inuit-tabs
   repo: github.com/inuitcss/objects.tabs
   desc: Simple tabs abstraction.
-settings.defaults:
-  name: settings.defaults
-  slug: inuit-defaults
-  repo: github.com/inuitcss/settings.defaults
-  desc: inuitcss’ default settings
-settings.responsive:
-  name: settings.responsive
-  slug: inuit-responsive-settings
-  repo: github.com/inuitcss/settings.responsive
-  desc: ---
-tools.functions:
-  name: tools.functions
-  slug: inuit-functions
-  repo: github.com/inuitcss/tools.functions
-  desc: inuitcss’ default functions
-tools.mixins:
-  name: tools.mixins
-  slug: inuit-mixins
-  repo: github.com/inuitcss/tools.mixins
-  desc: inuitcss’ default mixins
-tools.responsive:
-  name: tools.responsive
-  slug: inuit-responsive-tools
-  repo: github.com/inuitcss/tools.responsive
-  desc: ---
-tools.widths:
-  name: tools.widths
-  slug: inuit-tools-widths
-  repo: github.com/inuitcss/tools.widths
-  desc: inuitcss width classes generator
 trumps.clearfix:
   name: trumps.clearfix
   slug: inuit-clearfix
