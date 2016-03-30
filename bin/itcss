@@ -2,5 +2,5 @@
 
 require 'itcss_cli'
 
-init = ItcssCli::Init.new
+init = ItcssCli::Core.new
 init.command_parser

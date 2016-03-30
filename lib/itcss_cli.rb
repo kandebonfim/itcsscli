@@ -5,7 +5,7 @@ require 'colorize'
 require 'yaml'
 
 module ItcssCli
-  class Init
+  class Core
 
     def initialize
       @ITCSS_CONFIG_FILE = 'itcss.yml'
