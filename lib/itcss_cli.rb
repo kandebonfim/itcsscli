@@ -151,8 +151,7 @@ module ItcssCli
 
       itcss_files_to_import = {}
       @ITCSS_MODULES.each do |current_module|
-        current_inuit_modules = @ITCSS_CONFIG["inuit_modules"].select{ |p| p.include? current_module }
-        itcss_files_to_import[current_module] = current_inuit_modules.map{ |p| inuit_imports_path p }
+        itcss_files_to_import[current_module] = find_inuit_modules(current_module)
 
         itcss_module_files = Dir[ File.join("#{@ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
         itcss_files_to_import[current_module] += itcss_module_files.map{|s| s.gsub("#{@ITCSS_DIR}/", '')}
@@ -221,6 +220,11 @@ module ItcssCli
         puts "'#{ARGV[1]}' is not an ITCSS module. Try #{@ITCSS_MODULES.join(', ')}.".red
         abort
       end
+    end
+
+    def find_inuit_modules(current_module)
+      current_inuit_modules = @ITCSS_CONFIG["inuit_modules"].select{ |p| p.include? current_module }
+      current_inuit_modules.map{ |p| inuit_imports_path p }
     end
 
   end
