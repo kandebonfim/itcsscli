@@ -4,7 +4,7 @@
 <%= "//   " + contents %>
 <%= "// " + "=" * 40 %>
 
-<% ITCSS_FILES.each_with_index do |value, index| %>
+<% @ITCSS_FILES.each_with_index do |value, index| %>
 // [<%= index %>] <%= value[0].slice(0,1).capitalize + value[0].slice(1..-1) + " " + "-" *  (15-value[0].length) + " " + value[1] %><% end %>
 
 // ↓ ITCSS_CLI FILE IMPORTING ↓
