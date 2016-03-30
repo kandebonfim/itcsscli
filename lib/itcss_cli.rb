@@ -24,14 +24,17 @@ module ItcssCli
         "trumps" => "Overrides and helper classes."
       }
 
-      @ITCSS_COMMANDS = [
-        "itcss init                       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
-        "itcss install example            | Creates an example of ITCSS structure in path specified in itcss.yml.",
-        "itcss new [module] [filename]    | Creates a new ITCSS module and automatically import it into imports file.",
-        "itcss update                     | Updates the imports file using the files inside ITCSS structure.",
-        "itcss help                       | Shows all available itcss commands and it's functions.",
-        "itcss version                    | Shows itcss_cli gem version installed. [short-cut alias: '-v', 'v']"
+      @ITCSS_COMMANDS_DESCRIPTION = [
+        "             COMMAND            ALIAS                               FUNCTION                                 ",
+        "itcss init                    |       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
+        "itcss install [filenames]     |       | Creates an example of ITCSS structure in path specified in itcss.yml.",
+        "itcss new [module] [filename] |   n   | Creates a new ITCSS module and automatically import it into imports file.",
+        "itcss update                  |   u   | Updates the imports file using the files inside ITCSS structure.",
+        "itcss help                    | h, -h | Shows all available itcss commands and it's functions.",
+        "itcss version                 | v, -v | Shows itcss_cli gem version installed."
       ]
+
+      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'update', 'u', 'help', 'h', '-h', 'version', 'v', '-v']
 
       if File.exist?(@ITCSS_CONFIG_FILE)
         @ITCSS_CONFIG = YAML.load_file(@ITCSS_CONFIG_FILE)
@@ -44,19 +47,21 @@ module ItcssCli
     end
 
     def command_parser
+      if @ITCSS_COMMANDS.include? ARGV[0]
+
       # $ itcss init
-      if ARGV[0] == 'init'
+      elsif 'init' == ARGV[0]
         itcss_init
 
 
       # $ itcss install example
-      elsif ARGV[0] == 'install' && ARGV[1] == 'example'
+      elsif 'install' == ARGV[0]
         itcss_init_checker
-        itcss_install_example
+        itcss_install(ARGV[1])
 
 
       # $ itcss new||n [module] [filename]
-      elsif ARGV[0] == 'new' && ARGV[1] && ARGV[2] || ARGV[0] == 'n' && ARGV[1] && ARGV[2]
+      elsif ['new', 'n'].include? ARGV[0] && ARGV[1] && ARGV[2]
         itcss_init_checker
 
         occur = @ITCSS_MODULES.each_index.select{|i| @ITCSS_MODULES[i].include? ARGV[1]}
@@ -76,11 +81,16 @@ module ItcssCli
       # $ itcss version
       elsif ['version', '-v', 'v'].include? ARGV[0]
         itcss_version
+
+      # Not a valid command
+      else
+        puts "#{current_full_command} is not a valid command. Check out the available commands:".red
+        itcss_help
       end
 
 
       # $ itcss update
-      if ['install', 'new', 'update'].include? ARGV[0]
+      if ['install', 'new', 'n', 'update', 'u'].include? ARGV[0]
         itcss_init_checker
         itcss_update_import_file
       end
@@ -106,12 +116,12 @@ module ItcssCli
       end
     end
 
-    def itcss_install_example
+    def itcss_install(filename)
       File.open @ITCSS_MODULE_TEMPLATE do |io|
         template = ERB.new io.read
 
         @ITCSS_MODULES.each do |file|
-          itcss_new_file(file, 'example', template)
+          itcss_new_file(file, filename, template)
         end
       end
     end
@@ -168,7 +178,7 @@ module ItcssCli
 
     def itcss_help
       puts "itcss_cli available commmands:".yellow
-      puts @ITCSS_COMMANDS.map{|s| s.prepend("  ")}
+      puts @ITCSS_COMMANDS_DESCRIPTION.map{|s| s.prepend("  ")}
     end
 
     def itcss_version
@@ -196,6 +206,10 @@ module ItcssCli
 
     def relative_file_path(filename)
       File.expand_path(File.join(File.dirname(__FILE__), filename))
+    end
+
+    def current_full_command
+      "`itcss_cli #{ARGV.join(' ')}`"
     end
 
   end
