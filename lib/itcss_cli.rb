@@ -31,7 +31,7 @@ module ItcssCli
         "itcss init                          |       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
         "itcss install [filenames]           |       | Creates an example of ITCSS structure in path specified in itcss.yml.",
         "itcss new [module] [filename]       |   n   | Creates a new ITCSS module and automatically import it into imports file.",
-        "itcss inuit new [module] [filename] |inuit n| Add specified inuit module as an itcss dependency.",
+        "itcss inuit new [inuit module]      |inuit n| Add specified inuit module as an itcss dependency.",
         "itcss update                        |   u   | Updates the imports file using the files inside ITCSS structure.",
         "itcss help                          | h, -h | Shows all available itcss commands and it's functions.",
         "itcss version                       | v, -v | Shows itcss_cli gem version installed."
@@ -51,6 +51,9 @@ module ItcssCli
       else
         @ITCSS_PACKAGE_MANAGER = nil
       end
+
+      @INUIT_AVAILABLE_MODULES_FILE = relative_file_path "../data/inuit_modules.yml"
+      @INUIT_AVAILABLE_MODULES = YAML.load_file(@INUIT_AVAILABLE_MODULES_FILE)
     end
 
     # ITCSS
@@ -217,7 +220,11 @@ module ItcssCli
 
     def not_a_valid_command
       puts "#{current_full_command} is not a valid command. Check out the available commands:".red
-      itcss_help
+      if 'inuit' == ARGV[0]
+        inuit_help
+      else
+        itcss_help
+      end
       abort
     end
 
@@ -238,18 +245,23 @@ module ItcssCli
         abort
       end
 
-      # $ itcss inuit new [module] [filename]
+      # $ itcss inuit new [inuit module]
       if ['new', 'n'].include? ARGV[1]
-        if find_valid_module ARGV[2]
+        if ARGV[2] && inuit_find_valid_module(ARGV[2])
           itcss_init_checker
-          inuit_new_module(find_valid_module(ARGV[2]), ARGV[3])
+          inuit_module_name_frags = ARGV[2].split('.')
+          inuit_new_module(inuit_module_name_frags[0], inuit_module_name_frags[1], inuit_find_valid_module(ARGV[2]))
         else
           not_a_valid_command
         end
+
+      # $ itcss inuit help
+      elsif ['help', 'h', '-h'].include? ARGV[1]
+        inuit_help
       end
     end
 
-    def inuit_new_module(c_module, file)
+    def inuit_new_module(c_module, file, module_object)
       if file
         current_module_name = inuit_module_fullname(c_module, file)
         config_file = @ITCSS_CONFIG_FILE
@@ -257,7 +269,7 @@ module ItcssCli
         current_config['inuit_modules'] << current_module_name
 
         unless current_config['inuit_modules'].uniq.length == current_config['inuit_modules'].length
-          puts "#{current_module_name} was already added to #{@ITCSS_CONFIG_FILE}.".yellow
+          puts "#{current_module_name} is already added to #{@ITCSS_CONFIG_FILE}.".yellow
           abort
         end
 
@@ -273,22 +285,32 @@ module ItcssCli
           end
         end
 
-        # inuit_shell_install(@ITCSS_PACKAGE_MANAGER, current_module_name)
+        puts "using #{@ITCSS_PACKAGE_MANAGER} to install inuit '#{current_module_name}' dependency...".green
+        sleep(2)
+        output = `#{@ITCSS_PACKAGE_MANAGER} install --save #{module_object['slug']}`
+        puts output
 
         puts "update #{@ITCSS_CONFIG_FILE}. [added #{current_module_name}]".blue
       end
     end
 
-    def inuit_dependency_checker
-
+    def inuit_help
+      puts "itcss inuit available commmands:".yellow
+      puts @INUIT_AVAILABLE_MODULES.map { |e| "  itcss inuit new #{e[0]}"+" "*(26-e[0].size)+"| "+e[1]['slug']  }
     end
 
     # Inuit Helper Methods
     def inuit_find_modules(current_module)
-      config_file = @ITCSS_CONFIG_FILE
-      current_config = YAML.load_file(config_file)
+      current_config = YAML.load_file(@ITCSS_CONFIG_FILE)
       current_inuit_modules = current_config["inuit_modules"].select{ |p| p.include? current_module }
       current_inuit_modules.map{ |p| inuit_imports_path p }
+    end
+
+    def inuit_find_valid_module(c_module)
+      valid_module = @INUIT_AVAILABLE_MODULES[c_module]
+      unless valid_module.nil?
+        valid_module
+      end
     end
 
     def inuit_module_fullname(c_module, filename)
@@ -298,11 +320,6 @@ module ItcssCli
     def inuit_imports_path(filename)
       frags = filename.split(".")
       "inuit-#{frags[1]}/#{filename}"
-    end
-
-    def inuit_shell_install(package_manager, inuit_module)
-      output = `#{package_manager} install --save #{inuit_module}`
-      puts output
     end
 
   end

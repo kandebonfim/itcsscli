@@ -1,0 +1,175 @@
+base.headings:
+  name: base.headings
+  slug: inuit-headings
+  repo: github.com/inuitcss/base.headings
+  desc: Base-level heading styles.
+base.images:
+  name: base.images
+  slug: inuit-images
+  repo: github.com/inuitcss/base.images
+  desc: Simple image styles
+base.lists:
+  name: base.lists
+  slug: inuit-lists
+  repo: github.com/inuitcss/base.lists
+  desc: Simple list styles
+base.page:
+  name: base.page
+  slug: inuit-page
+  repo: github.com/inuitcss/base.page
+  desc: Base page-level styling.
+base.paragraphs:
+  name: base.paragraphs
+  slug: inuit-paragraphs
+  repo: github.com/inuitcss/base.paragraphs
+  desc: Simple paragraph styles
+generic.box-sizing:
+  name: generic.box-sizing
+  slug: inuit-box-sizing
+  repo: github.com/inuitcss/generic.box-sizing
+  desc: Global box-sizing options.
+generic.normalize:
+  name: generic.normalize
+  slug: inuit-normalize
+  repo: github.com/inuitcss/generic.normalize
+  desc: "@necolas’ normalize.css."
+generic.reset:
+  name: generic.reset
+  slug: inuit-reset
+  repo: github.com/inuitcss/generic.reset
+  desc: Basic reset to complement normalize.css.
+generic.shared:
+  name: generic.shared
+  slug: inuit-shared
+  repo: github.com/inuitcss/generic.shared
+  desc: High-level styling across shared rulesets
+objects.block:
+  name: objects.block
+  slug: inuit-block
+  repo: github.com/inuitcss/objects.block
+  desc: Stack an image above some text content.
+objects.box:
+  name: objects.box
+  slug: inuit-box
+  repo: github.com/inuitcss/objects.box
+  desc: Simple object to make boxed-off content.
+objects.buttons:
+  name: objects.buttons
+  slug: inuit-buttons
+  repo: github.com/inuitcss/objects.buttons
+  desc: Simple, extensible button objects
+objects.flag:
+  name: objects.flag
+  slug: inuit-flag
+  repo: github.com/inuitcss/objects.flag
+  desc: The flag object
+objects.layout:
+  name: objects.layout
+  slug: inuit-layout
+  repo: github.com/inuitcss/objects.layout
+  desc: inuitcss’ answer to the traditional grid system
+objects.list-bare:
+  name: objects.list-bare
+  slug: inuit-list-bare
+  repo: github.com/inuitcss/objects.list-bare
+  desc: A simple object to remove bullets and indents from lists
+objects.list-block:
+  name: objects.list-block
+  slug: inuit-list-block
+  repo: github.com/inuitcss/objects.list-block
+  desc: A simple, blocky list object.
+objects.list-inline:
+  name: objects.list-inline
+  slug: inuit-list-inline
+  repo: github.com/inuitcss/objects.list-inline
+  desc: displays a list as one horizontal row.
+objects.list-ui:
+  name: objects.list-ui
+  slug: inuit-list-ui
+  repo: github.com/inuitcss/objects.list-ui
+  desc: A simple, keyline-delimited blocky list object.
+objects.media:
+  name: objects.media
+  slug: inuit-media
+  repo: github.com/inuitcss/objects.media
+  desc: "@stubbornella’s media object"
+objects.pack:
+  name: objects.pack
+  slug: inuit-pack
+  repo: github.com/inuitcss/objects.pack
+  desc: Cause items to pack up to automatically fill their parent.
+objects.tables:
+  name: objects.tables
+  slug: inuit-tables
+  repo: github.com/inuitcss/objects.tables
+  desc: Basic table styles.
+objects.tabs:
+  name: objects.tabs
+  slug: inuit-tabs
+  repo: github.com/inuitcss/objects.tabs
+  desc: Simple tabs abstraction.
+settings.defaults:
+  name: settings.defaults
+  slug: inuit-defaults
+  repo: github.com/inuitcss/settings.defaults
+  desc: inuitcss’ default settings
+settings.responsive:
+  name: settings.responsive
+  slug: inuit-responsive-settings
+  repo: github.com/inuitcss/settings.responsive
+  desc: ---
+tools.functions:
+  name: tools.functions
+  slug: inuit-functions
+  repo: github.com/inuitcss/tools.functions
+  desc: inuitcss’ default functions
+tools.mixins:
+  name: tools.mixins
+  slug: inuit-mixins
+  repo: github.com/inuitcss/tools.mixins
+  desc: inuitcss’ default mixins
+tools.responsive:
+  name: tools.responsive
+  slug: inuit-responsive-tools
+  repo: github.com/inuitcss/tools.responsive
+  desc: ---
+tools.widths:
+  name: tools.widths
+  slug: inuit-tools-widths
+  repo: github.com/inuitcss/tools.widths
+  desc: inuitcss width classes generator
+trumps.clearfix:
+  name: trumps.clearfix
+  slug: inuit-clearfix
+  repo: github.com/inuitcss/trumps.clearfix
+  desc: Simple clearfix helper
+trumps.headings:
+  name: trumps.headings
+  slug: inuit-headings-trumps
+  repo: github.com/inuitcss/trumps.headings
+  desc: ---
+trumps.print:
+  name: trumps.print
+  slug: inuit-print
+  repo: github.com/inuitcss/trumps.print
+  desc: Very basic reset-like module for print styles.
+trumps.spacing:
+  name: trumps.spacing
+  slug: inuit-spacing
+  repo: github.com/inuitcss/trumps.spacing
+  desc: Spacing helper classes
+trumps.spacing-responsive:
+  name: trumps.spacing-responsive
+  slug: inuit-spacing-responsive
+  repo: github.com/inuitcss/trumps.spacing-responsive
+  desc: ---
+trumps.widths:
+  name: trumps.widths
+  slug: inuit-widths
+  repo: github.com/inuitcss/trumps.widths
+  desc: A series of helper classes for dealing with widths
+trumps.widths-responsive:
+  name: trumps.widths-responsive
+  slug: inuit-widths-responsive
+  repo: github.com/inuitcss/trumps.widths-responsive
+  desc: ---
