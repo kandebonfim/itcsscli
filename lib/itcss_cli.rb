@@ -32,6 +32,7 @@ module ItcssCli
         "itcss install [filenames]           |       | Creates an example of ITCSS structure in path specified in itcss.yml.",
         "itcss new [module] [filename]       |   n   | Creates a new ITCSS module and automatically import it into imports file.",
         "itcss inuit new [inuit module]      |inuit n| Add specified inuit module as an itcss dependency.",
+        "itcss inuit help                    |inuit h| Add specified inuit module as an itcss dependency.",
         "itcss update                        |   u   | Updates the imports file using the files inside ITCSS structure.",
         "itcss help                          | h, -h | Shows all available itcss commands and it's functions.",
         "itcss version                       | v, -v | Shows itcss_cli gem version installed."
