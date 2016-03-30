@@ -203,7 +203,7 @@ module ItcssCli
     end
 
     def current_full_command
-      "`itcss_cli #{ARGV.join(' ')}`"
+      "`itcss #{ARGV.join(' ')}`"
     end
 
     def not_a_valid_command
