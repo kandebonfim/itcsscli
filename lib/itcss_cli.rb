@@ -296,7 +296,10 @@ module ItcssCli
 
     def inuit_help
       puts "itcss inuit available commmands:".yellow
+      puts "  COMMAND                                   | #{@ITCSS_PACKAGE_MANAGER.upcase} EQUIVALENT"
       puts @INUIT_AVAILABLE_MODULES.map { |e| "  itcss inuit new #{e[0]}"+" "*(26-e[0].size)+"| "+e[1]['slug']  }
+      puts "You can check all of these repositories at https://github.com/inuitcss/[inuit module].".yellow
+      abort
     end
 
     # Inuit Helper Methods
