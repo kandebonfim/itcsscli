@@ -44,6 +44,13 @@ module ItcssCli
       else
         @ITCSS_CONFIG = nil
       end
+
+      if File.exist?(@ITCSS_CONFIG_FILE) && @ITCSS_CONFIG['package_manager']
+        @ITCSS_PACKAGE_MANAGER ||= @ITCSS_CONFIG['package_manager']
+        @INUIT_MODULES ||= @ITCSS_CONFIG['inuit_modules']
+      else
+        @ITCSS_PACKAGE_MANAGER = nil
+      end
     end
 
     # ITCSS
@@ -226,6 +233,11 @@ module ItcssCli
 
     # INUIT
     def inuit_command_parser
+      if @ITCSS_PACKAGE_MANAGER.nil?
+        puts "You didn't choose a package manager. Please do it in itcss.yml".red
+        abort
+      end
+
       # $ itcss inuit new [module] [filename]
       if ['new', 'n'].include? ARGV[1]
         if find_valid_module ARGV[2]
@@ -242,7 +254,7 @@ module ItcssCli
         current_module_name = inuit_module_fullname(c_module, file)
         config_file = @ITCSS_CONFIG_FILE
         current_config = YAML.load_file(config_file)
-        current_config['inuit_modules'] << inuit_module_fullname(c_module, file)
+        current_config['inuit_modules'] << current_module_name
 
         unless current_config['inuit_modules'].uniq.length == current_config['inuit_modules'].length
           puts "#{current_module_name} was already added to #{@ITCSS_CONFIG_FILE}.".yellow
@@ -260,8 +272,15 @@ module ItcssCli
             out.puts template.result binding
           end
         end
+
+        # inuit_shell_install(@ITCSS_PACKAGE_MANAGER, current_module_name)
+
         puts "update #{@ITCSS_CONFIG_FILE}. [added #{current_module_name}]".blue
       end
+    end
+
+    def inuit_dependency_checker
+
     end
 
     # Inuit Helper Methods
@@ -279,6 +298,11 @@ module ItcssCli
     def inuit_imports_path(filename)
       frags = filename.split(".")
       "inuit-#{frags[1]}/#{filename}"
+    end
+
+    def inuit_shell_install(package_manager, inuit_module)
+      output = `#{package_manager} install --save #{inuit_module}`
+      puts output
     end
 
   end
