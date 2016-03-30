@@ -7,72 +7,65 @@ require 'yaml'
 module ItcssCli
   class Init
 
-    ITCSS_CONFIG_FILE = 'itcss.yml'
-    ITCSS_CONFIG_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_config.erb"))
-    ITCSS_MODULE_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_module.erb"))
-    ITCSS_APP_TEMPLATE = File.expand_path(File.join(File.dirname(__FILE__), "../templates/itcss_application.erb"))
-    ITCSS_MODULES = ["requirements", "settings", "tools", "generic", "base", "objects", "components", "trumps"]
-    ITCSS_FILES = {
-      "requirements" => "Vendor libraries",
-      "settings" => "Sass vars, etc.",
-      "tools" => "Functions and mixins.",
-      "generic" => "Generic, high-level styling, like resets, etc.",
-      "base" => "Unclasses HTML elements (e.g. `h2`, `ul`).",
-      "objects" => "Objects and abstractions.",
-      "components" => "Your designed UI elements (inuitcss includes none of these).",
-      "trumps" => "Overrides and helper classes."
-    }
-
-    ITCSS_COMMANDS = [
-      "itcss init                       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
-      "itcss install example            | Creates an example of ITCSS structure in path specified in itcss.yml.",
-      "itcss new [module] [filename]    | Creates a new ITCSS module and automatically import it into imports file.",
-      "itcss update                     | Updates the imports file using the files inside ITCSS structure.",
-      "itcss help                       | Shows all available itcss commands and it's functions.",
-      "itcss version                    | Shows itcss_cli gem version installed. [short-cut alias: '-v', 'v']"
-    ]
-
-    if File.exist?(ITCSS_CONFIG_FILE)
-      ITCSS_CONFIG = YAML.load_file(ITCSS_CONFIG_FILE)
-      ITCSS_DIR ||= ITCSS_CONFIG['stylesheets_directory']
-      ITCSS_BASE_FILE ||= ITCSS_CONFIG['stylesheets_import_file']
-      ITCSS_PACKAGE_MANAGEMENT ||= ITCSS_CONFIG['package_management']
-    else
-      ITCSS_CONFIG = nil
+    def self.relative_file_path(filename)
+      File.expand_path(File.join(File.dirname(__FILE__), filename))
     end
 
-    def init_checker
-      if ITCSS_CONFIG.nil?
-        puts "There's no #{ITCSS_CONFIG_FILE} created yet. Run `itcss init` to create it.".red
-        abort
-      elsif ITCSS_DIR.nil? || ITCSS_BASE_FILE.nil?
-        puts "Something is wrong with your itcss.yml file. Please delete it and run `itcss init` again.".red
-        abort
-      elsif ITCSS_DIR == 'TODO' || ITCSS_BASE_FILE == 'TODO'
-        puts "You haven't done the itcss_cli's configuration. You must provide your directories settings in itcss.yml.".yellow
-        abort
+    def initialize
+      ITCSS_CONFIG_FILE = 'itcss.yml'
+      ITCSS_CONFIG_TEMPLATE = relative_file_path "../templates/itcss_config.erb"
+      ITCSS_MODULE_TEMPLATE = relative_file_path "../templates/itcss_module.erb"
+      ITCSS_APP_TEMPLATE = relative_file_path "../templates/itcss_application.erb"
+      ITCSS_MODULES = ["requirements", "settings", "tools", "generic", "base", "objects", "components", "trumps"]
+      ITCSS_FILES = {
+        "requirements" => "Vendor libraries",
+        "settings" => "Sass vars, etc.",
+        "tools" => "Functions and mixins.",
+        "generic" => "Generic, high-level styling, like resets, etc.",
+        "base" => "Unclasses HTML elements (e.g. `h2`, `ul`).",
+        "objects" => "Objects and abstractions.",
+        "components" => "Your designed UI elements (inuitcss includes none of these).",
+        "trumps" => "Overrides and helper classes."
+      }
+
+      ITCSS_COMMANDS = [
+        "itcss init                       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
+        "itcss install example            | Creates an example of ITCSS structure in path specified in itcss.yml.",
+        "itcss new [module] [filename]    | Creates a new ITCSS module and automatically import it into imports file.",
+        "itcss update                     | Updates the imports file using the files inside ITCSS structure.",
+        "itcss help                       | Shows all available itcss commands and it's functions.",
+        "itcss version                    | Shows itcss_cli gem version installed. [short-cut alias: '-v', 'v']"
+      ]
+
+      if File.exist?(ITCSS_CONFIG_FILE)
+        ITCSS_CONFIG = YAML.load_file(ITCSS_CONFIG_FILE)
+        ITCSS_DIR ||= ITCSS_CONFIG['stylesheets_directory']
+        ITCSS_BASE_FILE ||= ITCSS_CONFIG['stylesheets_import_file']
+        ITCSS_PACKAGE_MANAGEMENT ||= ITCSS_CONFIG['package_management']
+      else
+        ITCSS_CONFIG = nil
       end
     end
 
     def command_parser
       # $ itcss init
       if ARGV[0] == 'init'
-        init_itcss_config_file
+        itcss_init
 
 
       # $ itcss install example
       elsif ARGV[0] == 'install' && ARGV[1] == 'example'
-        init_checker
-        new_itcss_basic_structure
+        itcss_init_checker
+        itcss_install_example
 
 
       # $ itcss new||n [module] [filename]
       elsif ARGV[0] == 'new' && ARGV[1] && ARGV[2] || ARGV[0] == 'n' && ARGV[1] && ARGV[2]
-        init_checker
+        itcss_init_checker
 
         occur = ITCSS_MODULES.each_index.select{|i| ITCSS_MODULES[i].include? ARGV[1]}
         if occur.size == 1
-          new_itcss_module(ITCSS_MODULES[occur[0]], ARGV[2])
+          itcss_new_module(ITCSS_MODULES[occur[0]], ARGV[2])
         else
           puts "'#{ARGV[1]}' is not an ITCSS module. Try settings, tools, generic, base, objects, components or trumps.".red
           abort
@@ -80,23 +73,24 @@ module ItcssCli
 
 
       # $ itcss help
-      elsif ARGV[0] == 'help'
+      elsif ['help', '-h', 'h'].include? ARGV[0]
         itcss_help
 
 
       # $ itcss version
-      elsif ARGV[0] == 'version' || ARGV[0] == '-v' || ARGV[0] == 'v'
+      elsif ['version', '-v', 'v'].include? ARGV[0]
         itcss_version
       end
 
+
       # $ itcss update
-      if ARGV[0] == 'install' || ARGV[0] == 'new' || ARGV[0] == 'update'
-        init_checker
-        generate_base_file
+      if ['install', 'new', 'update'].include? ARGV[0]
+        itcss_init_checker
+        itcss_update_import_file
       end
     end
 
-    def init_itcss_config_file
+    def itcss_init
       unless File.exist?(ITCSS_CONFIG_FILE)
         File.open ITCSS_CONFIG_TEMPLATE do |io|
           template = ERB.new io.read
@@ -116,24 +110,24 @@ module ItcssCli
       end
     end
 
-    def new_itcss_basic_structure
+    def itcss_install_example
       File.open ITCSS_MODULE_TEMPLATE do |io|
         template = ERB.new io.read
 
         ITCSS_MODULES.each do |file|
-          new_itcss_file(file, 'example', template)
+          itcss_new_file(file, 'example', template)
         end
       end
     end
 
-    def new_itcss_module(type, file)
+    def itcss_new_module(type, file)
       File.open ITCSS_MODULE_TEMPLATE do |io|
         template = ERB.new io.read
-        new_itcss_file(type, file, template)
+        itcss_new_file(type, file, template)
       end
     end
 
-    def new_itcss_file(type, file, template)
+    def itcss_new_file(type, file, template)
       FileUtils.mkdir_p ITCSS_DIR
       FileUtils.mkdir_p "#{ITCSS_DIR}/#{type}"
       FileUtils.chmod "u=wrx,go=rx", ITCSS_DIR
@@ -151,7 +145,7 @@ module ItcssCli
       end
     end
 
-    def generate_base_file
+    def itcss_update_import_file
       FileUtils.mkdir_p ITCSS_DIR
 
       itcss_files_to_import = {}
@@ -176,11 +170,6 @@ module ItcssCli
       puts "update #{file_path}".blue
     end
 
-    def inuit_imports_path(filename)
-      frags = filename.split(".")
-      return "inuit-#{frags[1]}/#{filename}"
-    end
-
     def itcss_help
       puts "itcss_cli available commmands:".yellow
       puts ITCSS_COMMANDS.map{|s| s.prepend("  ")}
@@ -188,6 +177,25 @@ module ItcssCli
 
     def itcss_version
       puts VERSION
+    end
+
+    # Helper Methods
+    def inuit_imports_path(filename)
+      frags = filename.split(".")
+      return "inuit-#{frags[1]}/#{filename}"
+    end
+
+    def itcss_init_checker
+      if ITCSS_CONFIG.nil?
+        puts "There's no #{ITCSS_CONFIG_FILE} created yet. Run `itcss init` to create it.".red
+        abort
+      elsif ITCSS_DIR.nil? || ITCSS_BASE_FILE.nil?
+        puts "Something is wrong with your itcss.yml file. Please delete it and run `itcss init` again.".red
+        abort
+      elsif ITCSS_DIR == 'TODO' || ITCSS_BASE_FILE == 'TODO'
+        puts "You haven't done the itcss_cli's configuration. You must provide your directories settings in itcss.yml.".yellow
+        abort
+      end
     end
 
   end
