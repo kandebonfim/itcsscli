@@ -24,28 +24,29 @@ module ItcssCli
         "trumps" => "Overrides and helper classes."
       }
 
-      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'update', 'u', 'help', 'h', '-h', 'version', 'v', '-v']
+      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'inuit', 'update', 'u', 'help', 'h', '-h', 'version', 'v', '-v']
 
       @ITCSS_COMMANDS_DESCRIPTION = [
-        "             COMMAND            ALIAS                               FUNCTION                                 ",
-        "itcss init                    |       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
-        "itcss install [filenames]     |       | Creates an example of ITCSS structure in path specified in itcss.yml.",
-        "itcss new [module] [filename] |   n   | Creates a new ITCSS module and automatically import it into imports file.",
-        "itcss update                  |   u   | Updates the imports file using the files inside ITCSS structure.",
-        "itcss help                    | h, -h | Shows all available itcss commands and it's functions.",
-        "itcss version                 | v, -v | Shows itcss_cli gem version installed."
+        "             COMMAND                  ALIAS                               FUNCTION                                 ",
+        "itcss init                          |       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
+        "itcss install [filenames]           |       | Creates an example of ITCSS structure in path specified in itcss.yml.",
+        "itcss new [module] [filename]       |   n   | Creates a new ITCSS module and automatically import it into imports file.",
+        "itcss inuit new [module] [filename] |inuit n| Creates a new ITCSS module and automatically import it into imports file.",
+        "itcss update                        |   u   | Updates the imports file using the files inside ITCSS structure.",
+        "itcss help                          | h, -h | Shows all available itcss commands and it's functions.",
+        "itcss version                       | v, -v | Shows itcss_cli gem version installed."
       ]
 
       if File.exist?(@ITCSS_CONFIG_FILE)
         @ITCSS_CONFIG = YAML.load_file(@ITCSS_CONFIG_FILE)
         @ITCSS_DIR ||= @ITCSS_CONFIG['stylesheets_directory']
         @ITCSS_BASE_FILE ||= @ITCSS_CONFIG['stylesheets_import_file']
-        @ITCSS_PACKAGE_MANAGEMENT ||= @ITCSS_CONFIG['package_management']
       else
         @ITCSS_CONFIG = nil
       end
     end
 
+    # ITCSS
     def command_parser
       # Not a valid command
       unless @ITCSS_COMMANDS.include? ARGV[0]
@@ -65,12 +66,20 @@ module ItcssCli
 
       # $ itcss new||n [module] [filename]
       elsif ['new', 'n'].include? ARGV[0]
-        if find_valid_module ARGV[1] && ARGV[2]
-          itcss_init_checker
-          itcss_new_module(find_valid_module(ARGV[1]), ARGV[2])
+        if find_valid_module ARGV[1]
+          if ARGV[2]
+            itcss_init_checker
+            itcss_new_module(find_valid_module(ARGV[1]), ARGV[2])
+          else
+            not_a_valid_command
+          end
         else
           not_a_valid_command
         end
+
+      # $ itcss inuit||i [module] [filename]
+      elsif 'inuit' == ARGV[0]
+        inuit_command_parser
 
 
       # $ itcss help
@@ -85,7 +94,7 @@ module ItcssCli
 
 
       # $ itcss update
-      if ['install', 'new', 'n', 'update', 'u'].include? ARGV[0]
+      if ['install', 'new', 'n', 'inuit', 'update', 'u'].include? ARGV[0]
         itcss_init_checker
         itcss_update_import_file
       end
@@ -98,6 +107,7 @@ module ItcssCli
 
           config_file = relative_file_path '../templates/itcss_config.yml'
           content = YAML.load_file(config_file).to_yaml
+          first_init = true
 
           File.open @ITCSS_CONFIG_FILE, "w+" do |out|
             out.puts template.result binding
@@ -151,7 +161,7 @@ module ItcssCli
 
       itcss_files_to_import = {}
       @ITCSS_MODULES.each do |current_module|
-        itcss_files_to_import[current_module] = find_inuit_modules(current_module)
+        itcss_files_to_import[current_module] = inuit_find_modules(current_module)
 
         itcss_module_files = Dir[ File.join("#{@ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
         itcss_files_to_import[current_module] += itcss_module_files.map{|s| s.gsub("#{@ITCSS_DIR}/", '')}
@@ -180,11 +190,6 @@ module ItcssCli
     end
 
     # Helper Methods
-    def inuit_imports_path(filename)
-      frags = filename.split(".")
-      return "inuit-#{frags[1]}/#{filename}"
-    end
-
     def itcss_init_checker
       if @ITCSS_CONFIG.nil?
         puts "There's no #{@ITCSS_CONFIG_FILE} created yet. Run `itcss init` to create it.".red
@@ -215,16 +220,68 @@ module ItcssCli
     def find_valid_module(arg)
       occur = @ITCSS_MODULES.each_index.select{|i| @ITCSS_MODULES[i].include? arg}
       if occur.size == 1
-        return occur[0]
+        return @ITCSS_MODULES[occur[0]]
       else
-        puts "'#{ARGV[1]}' is not an ITCSS module. Try #{@ITCSS_MODULES.join(', ')}.".red
+        puts "'#{arg}' is not an ITCSS module. Try #{@ITCSS_MODULES.join(', ')}.".red
         abort
       end
     end
 
-    def find_inuit_modules(current_module)
-      current_inuit_modules = @ITCSS_CONFIG["inuit_modules"].select{ |p| p.include? current_module }
+    # INUIT
+    def inuit_command_parser
+      # $ itcss inuit new [module] [filename]
+      if ['new', 'n'].include? ARGV[1]
+        if find_valid_module ARGV[2]
+          itcss_init_checker
+          inuit_new_module(find_valid_module(ARGV[2]), ARGV[3])
+        else
+          not_a_valid_command
+        end
+      end
+    end
+
+    def inuit_new_module(c_module, file)
+      if file
+        current_module_name = inuit_module_fullname(c_module, file)
+        config_file = @ITCSS_CONFIG_FILE
+        current_config = YAML.load_file(config_file)
+        current_config['inuit_modules'] << inuit_module_fullname(c_module, file)
+
+        unless current_config['inuit_modules'].uniq.length == current_config['inuit_modules'].length
+          puts "#{current_module_name} was already added to #{@ITCSS_CONFIG_FILE}.".yellow
+          abort
+        end
+
+        current_config['inuit_modules'].uniq!
+
+        File.open @ITCSS_CONFIG_TEMPLATE do |io|
+          template = ERB.new io.read
+          content = current_config.to_yaml
+          first_init = nil
+
+          File.open @ITCSS_CONFIG_FILE, "w+" do |out|
+            out.puts template.result binding
+          end
+        end
+        puts "update #{@ITCSS_CONFIG_FILE}. [added #{current_module_name}]".blue
+      end
+    end
+
+    # Inuit Helper Methods
+    def inuit_find_modules(current_module)
+      config_file = @ITCSS_CONFIG_FILE
+      current_config = YAML.load_file(config_file)
+      current_inuit_modules = current_config["inuit_modules"].select{ |p| p.include? current_module }
       current_inuit_modules.map{ |p| inuit_imports_path p }
+    end
+
+    def inuit_module_fullname(c_module, filename)
+      "#{c_module}.#{filename}"
+    end
+
+    def inuit_imports_path(filename)
+      frags = filename.split(".")
+      "inuit-#{frags[1]}/#{filename}"
     end
 
   end
