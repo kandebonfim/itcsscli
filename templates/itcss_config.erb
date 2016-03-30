@@ -2,8 +2,8 @@
 <%= "#   #itcss.yml" %>
 <%= "# " + "=" * 40 %>
 
-<%= content %>
-<% unless first_init.nil? %># Root folder where the ITCSS file structure should be builded.
+<% unless content.nil? %><%= content %>
+<% else %># Root folder where the ITCSS file structure should be builded.
 stylesheets_directory: path/to/itcss/root
 
 # Base sass file (all ITCSS modules will be imported in it).

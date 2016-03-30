@@ -114,7 +114,7 @@ module ItcssCli
       unless File.exist?(@ITCSS_CONFIG_FILE)
         File.open @ITCSS_CONFIG_TEMPLATE do |io|
           template = ERB.new io.read
-          first_init = true
+          content = nil
 
           File.open @ITCSS_CONFIG_FILE, "w+" do |out|
             out.puts template.result binding
@@ -278,7 +278,6 @@ module ItcssCli
         File.open @ITCSS_CONFIG_TEMPLATE do |io|
           template = ERB.new io.read
           content = current_config.to_yaml
-          first_init = nil
 
           File.open @ITCSS_CONFIG_FILE, "w+" do |out|
             out.puts template.result binding
