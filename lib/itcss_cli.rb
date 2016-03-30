@@ -47,10 +47,14 @@ module ItcssCli
     end
 
     def command_parser
-      if @ITCSS_COMMANDS.include? ARGV[0]
+      # Not a valid command
+      unless @ITCSS_COMMANDS.include? ARGV[0]
+        puts "#{current_full_command} is not a valid command. Check out the available commands:".red
+        itcss_help
+      end
 
       # $ itcss init
-      elsif 'init' == ARGV[0]
+      if 'init' == ARGV[0]
         itcss_init
 
 
@@ -81,11 +85,6 @@ module ItcssCli
       # $ itcss version
       elsif ['version', '-v', 'v'].include? ARGV[0]
         itcss_version
-
-      # Not a valid command
-      else
-        puts "#{current_full_command} is not a valid command. Check out the available commands:".red
-        itcss_help
       end
 
 
