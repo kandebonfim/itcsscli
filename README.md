@@ -20,37 +20,63 @@ First, you'll need to set up ITCSS by running:
 
     $ itcss init
     
-Now go to `itcss.yml` and define define where Itcss_cli should create the ITCSS structure and the name of it's base file:
+Now go to `itcss.yml` and do your itcss_cli config:
 
 ```yml
-# Provide the root folder where the ITCSS file structure should be built.
-stylesheets_directory: 'source/assets/stylesheets'
+# Root folder where the ITCSS file structure should be builded.
+stylesheets_directory: source/stylesheets
 
-# Provide your base sass file (all ITCSS modules will be imported in it).
-stylesheets_import_file: 'application.css'
+# Base sass file (all ITCSS modules will be imported in it).
+stylesheets_import_file: application
+
+# Uncomment to enable inuit modules importing. [ bower or npm ]
+# package_manager: bower
+
+# inuit_modules:
+#   - tools.functions
+#   - settings.defaults
+#   - base.page
 ```
 
 Go ahead and grow your ITCSS structure:
 ```{r, engine='bash'}
 $ itcss new component modals
 create source/stylesheets/components/_components.modals.sass
-update source/stylesheets/application.css.sass
+update source/stylesheets/application.sass
 
 $ itcss new trumps helpers
 create source/stylesheets/trumps/_trumps.helpers.sass
-update source/stylesheets/application.css.sass
+update source/stylesheets/application.sass
 ```
 
-## Example
-Creating a full ITCSS structure:
+## Inuitcss Commands
+
+You can install and automatically import inuit modules via cli:
 
 ```{r, engine='bash'}
-$ itcss init
-create itcss.yml
-Well done! Please do your own configurations in itcss.yml.
+$ itcss inuit new settings.defaults
+using bower to install inuit 'settings.defaults' dependency...
+bower                          no-json No bower.json file to save to, use bower init to create one
+bower inuit-defaults#*          cached git://github.com/inuitcss/settings.defaults.git#0.2.3
+bower inuit-defaults#*        validate 0.2.3 against git://github.com/inuitcss/settings.defaults.git#*
+bower inuit-defaults#~0.2.3    install inuit-defaults#0.2.3
 
-[[[ Open the `itcss.yml` file and edit it. ]]]
+inuit-defaults#0.2.3 bower_components/inuit-defaults
+update itcss.yml. [added settings.defaults]
+update source/stylesheets/application.sass
+```
 
+Result at `application.sass`:
+```sass
+...
+// [1] Settings
+@import "inuit-defaults/settings.defaults"
+...
+```
+
+## Creating a full ITCSS structure
+
+```{r, engine='bash'}
 $ itcss install example
 create source/stylesheets/settings/_settings.example.sass
 create source/stylesheets/tools/_tools.example.sass
@@ -113,13 +139,9 @@ If you open the ITCSS's base file now, you'll see that all ITCSS modules are aut
 // ↑ ITCSS_CLI FILE IMPORTING ↑
 ```
 
-## Development
+---
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
+# Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/itcss_cli. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
