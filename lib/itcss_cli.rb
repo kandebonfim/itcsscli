@@ -198,7 +198,11 @@ module ItcssCli
 
       itcss_files_to_import = {}
       @ITCSS_MODULES.each do |current_module|
-        itcss_files_to_import[current_module] = inuit_find_modules(current_module)
+        itcss_files_to_import[current_module] = []
+
+        if @INUIT_MODULES
+          itcss_files_to_import[current_module] += inuit_find_modules(current_module)
+        end
 
         itcss_module_files = Dir[ File.join("#{@ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
         itcss_files_to_import[current_module] += itcss_module_files.map{|s| s.gsub("#{@ITCSS_DIR}/", '')}
@@ -296,6 +300,11 @@ module ItcssCli
         current_module_name = inuit_module_fullname(c_module, file)
         config_file = @ITCSS_CONFIG_FILE
         current_config = YAML.load_file(config_file)
+
+        if current_config['inuit_modules'].nil?
+          current_config['inuit_modules'] = []
+        end
+
         current_config['inuit_modules'] << current_module_name
 
         unless current_config['inuit_modules'].uniq.length == current_config['inuit_modules'].length
