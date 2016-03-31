@@ -8,17 +8,23 @@ gem 'itcss_cli'
 
 And then execute:
 
-    $ bundle
+```{r, engine='bash'}
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install itcss_cli
+```{r, engine='bash'}
+$ gem install itcss_cli
+```
 
 ## Usage
 
 First, you'll need to set up ITCSS by running:
 
-    $ itcss init
+```{r, engine='bash'}
+$ itcss init
+```
     
 Now go to `itcss.yml` and do your itcss_cli config:
 
@@ -56,9 +62,6 @@ You can install and automatically import inuit modules via cli:
 ```{r, engine='bash'}
 $ itcss inuit new settings.defaults
 using bower to install inuit 'settings.defaults' dependency...
-bower                          no-json No bower.json file to save to, use bower init to create one
-bower inuit-defaults#*          cached git://github.com/inuitcss/settings.defaults.git#0.2.3
-bower inuit-defaults#*        validate 0.2.3 against git://github.com/inuitcss/settings.defaults.git#*
 bower inuit-defaults#~0.2.3    install inuit-defaults#0.2.3
 
 inuit-defaults#0.2.3 bower_components/inuit-defaults
