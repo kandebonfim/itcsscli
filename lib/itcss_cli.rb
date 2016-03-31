@@ -112,17 +112,46 @@ module ItcssCli
     end
 
     def itcss_init
+      init_config = {}
+
+      puts "Well done! Let's configure your itcss.yml:".yellow
+
+      puts "Provide the root folder name where the ITCSS file structure should be builded:"
+      user_itcss_dir = STDIN.gets.chomp
+      init_config['stylesheets_directory'] = user_itcss_dir
+
+      puts "What is the name of your base sass file (all ITCSS modules will be imported in it):"
+      user_itcss_base_file = STDIN.gets.chomp
+      init_config['stylesheets_import_file'] = user_itcss_base_file
+
+      puts "Are you using any package manager? [ y / n ]"
+      user_itcss_package_manager = STDIN.gets.chomp
+      if user_itcss_package_manager == 'y'
+        user_package_manager = true
+      end
+
+      if user_package_manager == true
+        puts "Choose your package manager [ bower / npm ]:"
+        user_package_manager = STDIN.gets.chomp
+
+        unless ['bower', 'npm'].include? user_package_manager
+          puts "#{user_package_manager} is not a valid package manager".red
+          abort
+        end
+
+        init_config['package_manager'] = user_package_manager
+      end
+
       unless File.exist?(@ITCSS_CONFIG_FILE)
         File.open @ITCSS_CONFIG_TEMPLATE do |io|
           template = ERB.new io.read
-          content = nil
+          content = init_config.to_yaml
 
           File.open @ITCSS_CONFIG_FILE, "w+" do |out|
             out.puts template.result binding
           end
         end
-        puts "create #{@ITCSS_CONFIG_FILE}".green
-        puts "Well done! Please do your own configurations in itcss.yml.".yellow
+        puts "#{@ITCSS_CONFIG_FILE} successfully created!".green
       else
         puts "#{@ITCSS_CONFIG_FILE} already exists.".red
         abort
