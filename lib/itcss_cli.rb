@@ -116,15 +116,15 @@ module ItcssCli
 
       puts "Well done! Let's configure your itcss.yml:".yellow
 
-      puts "Provide the root folder name where the ITCSS file structure should be builded:"
+      puts "Provide the root folder name where the ITCSS file structure should be built:"
       user_itcss_dir = STDIN.gets.chomp
       init_config['stylesheets_directory'] = user_itcss_dir
 
-      puts "What is the name of your base sass file (all ITCSS modules will be imported in it):"
+      puts "What is the name of your base sass file (all ITCSS modules will be imported into it):"
       user_itcss_base_file = STDIN.gets.chomp
       init_config['stylesheets_import_file'] = user_itcss_base_file
 
-      puts "Are you using any package manager? [ y / n ]"
+      puts "Are you using a package manager? [ y / n ]"
       user_itcss_package_manager = STDIN.gets.chomp
       if user_itcss_package_manager == 'y'
         user_package_manager = true
