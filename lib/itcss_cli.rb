@@ -112,6 +112,15 @@ module ItcssCli
     end
 
     def itcss_init
+      if File.exist?(@ITCSS_CONFIG_FILE)
+        puts "There is already a itcss.yml created.".yellow
+        puts "Do you want to override it? [ y / n ]"
+        user_override_itcss_yml = STDIN.gets.chomp
+        unless user_override_itcss_yml == 'y'
+          abort
+        end
+      end
+
       init_config = {}
 
       puts "Well done! Let's configure your itcss.yml:".yellow
