@@ -151,20 +151,15 @@ module ItcssCli
         init_config['package_manager'] = user_package_manager
       end
 
-      unless File.exist?(@ITCSS_CONFIG_FILE)
-        File.open @ITCSS_CONFIG_TEMPLATE do |io|
-          template = ERB.new io.read
-          content = init_config.to_yaml
+      File.open @ITCSS_CONFIG_TEMPLATE do |io|
+        template = ERB.new io.read
+        content = init_config.to_yaml
 
-          File.open @ITCSS_CONFIG_FILE, "w+" do |out|
-            out.puts template.result binding
-          end
+        File.open @ITCSS_CONFIG_FILE, "w+" do |out|
+          out.puts template.result binding
         end
-        puts "#{@ITCSS_CONFIG_FILE} successfully created!".green
-      else
-        puts "#{@ITCSS_CONFIG_FILE} already exists.".red
-        abort
       end
+      puts "#{@ITCSS_CONFIG_FILE} successfully created!".green
     end
 
     def itcss_install(filename)
