@@ -112,21 +112,54 @@ module ItcssCli
     end
 
     def itcss_init
-      unless File.exist?(@ITCSS_CONFIG_FILE)
-        File.open @ITCSS_CONFIG_TEMPLATE do |io|
-          template = ERB.new io.read
-          content = nil
-
-          File.open @ITCSS_CONFIG_FILE, "w+" do |out|
-            out.puts template.result binding
-          end
+      if File.exist?(@ITCSS_CONFIG_FILE)
+        puts "There is already a itcss.yml created.".yellow
+        puts "Do you want to override it? [ y / n ]"
+        user_override_itcss_yml = STDIN.gets.chomp
+        unless user_override_itcss_yml == 'y'
+          abort
         end
-        puts "create #{@ITCSS_CONFIG_FILE}".green
-        puts "Well done! Please do your own configurations in itcss.yml.".yellow
-      else
-        puts "#{@ITCSS_CONFIG_FILE} already exists.".red
-        abort
       end
+
+      init_config = {}
+
+      puts "Well done! Let's configure your itcss.yml:".yellow
+
+      puts "Provide the root folder name where the ITCSS file structure should be built:"
+      user_itcss_dir = STDIN.gets.chomp
+      init_config['stylesheets_directory'] = user_itcss_dir
+
+      puts "What is the name of your base sass file (all ITCSS modules will be imported into it):"
+      user_itcss_base_file = STDIN.gets.chomp
+      init_config['stylesheets_import_file'] = user_itcss_base_file
+
+      puts "Are you using a package manager? [ y / n ]"
+      user_itcss_package_manager = STDIN.gets.chomp
+      if user_itcss_package_manager == 'y'
+        user_package_manager = true
+      end
+
+      if user_package_manager == true
+        puts "Choose your package manager [ bower / npm ]:"
+        user_package_manager = STDIN.gets.chomp
+
+        unless ['bower', 'npm'].include? user_package_manager
+          puts "#{user_package_manager} is not a valid package manager".red
+          abort
+        end
+
+        init_config['package_manager'] = user_package_manager
+      end
+
+      File.open @ITCSS_CONFIG_TEMPLATE do |io|
+        template = ERB.new io.read
+        content = init_config.to_yaml
+
+        File.open @ITCSS_CONFIG_FILE, "w+" do |out|
+          out.puts template.result binding
+        end
+      end
+      puts "#{@ITCSS_CONFIG_FILE} successfully created!".green
     end
 
     def itcss_install(filename)
@@ -169,7 +202,11 @@ module ItcssCli
 
       itcss_files_to_import = {}
       @ITCSS_MODULES.each do |current_module|
-        itcss_files_to_import[current_module] = inuit_find_modules(current_module)
+        itcss_files_to_import[current_module] = []
+
+        if @INUIT_MODULES
+          itcss_files_to_import[current_module] += inuit_find_modules(current_module)
+        end
 
         itcss_module_files = Dir[ File.join("#{@ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
         itcss_files_to_import[current_module] += itcss_module_files.map{|s| s.gsub("#{@ITCSS_DIR}/", '')}
@@ -267,6 +304,11 @@ module ItcssCli
         current_module_name = inuit_module_fullname(c_module, file)
         config_file = @ITCSS_CONFIG_FILE
         current_config = YAML.load_file(config_file)
+
+        if current_config['inuit_modules'].nil?
+          current_config['inuit_modules'] = []
+        end
+
         current_config['inuit_modules'] << current_module_name
 
         unless current_config['inuit_modules'].uniq.length == current_config['inuit_modules'].length
