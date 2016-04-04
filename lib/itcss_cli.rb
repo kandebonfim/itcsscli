@@ -240,10 +240,7 @@ module ItcssCli
         puts "There's no #{@ITCSS_CONFIG_FILE} created yet. Run `itcss init` to create it.".red
         abort
       elsif @ITCSS_DIR.nil? || @ITCSS_BASE_FILE.nil?
-        puts "Something is wrong with your itcss.yml file. Please delete it and run `itcss init` again.".red
-        abort
-      elsif @ITCSS_DIR == 'path/to/itcss/root' || @ITCSS_BASE_FILE == 'yourapplication'
-        puts "You haven't done the itcss_cli's configuration. You must provide your directories settings in itcss.yml.".yellow
+        puts "Something is wrong with your itcss.yml file. Please run `itcss init` again to override it.".red
         abort
       end
     end
