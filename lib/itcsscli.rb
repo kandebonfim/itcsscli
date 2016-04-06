@@ -1,4 +1,4 @@
-require "itcss_cli/version"
+require "itcsscli/version"
 require "erb"
 require 'fileutils'
 require 'colorize'
@@ -28,14 +28,14 @@ module ItcssCli
 
       @ITCSS_COMMANDS_DESCRIPTION = [
         "             COMMAND                  ALIAS                               FUNCTION                                 ",
-        "itcss init                          |       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
+        "itcss init                          |       | Initiates itcsscli configuration with a itcss.yml file. [start here]",
         "itcss install [filenames]           |       | Creates an example of ITCSS structure in path specified in itcss.yml.",
         "itcss new [module] [filename]       |   n   | Creates a new ITCSS module and automatically import it into imports file.",
         "itcss inuit new [inuit module]      |inuit n| Add specified inuit module as an itcss dependency.",
         "itcss inuit help                    |inuit h| Add specified inuit module as an itcss dependency.",
         "itcss update                        |   u   | Updates the imports file using the files inside ITCSS structure.",
         "itcss help                          | h, -h | Shows all available itcss commands and it's functions.",
-        "itcss version                       | v, -v | Shows itcss_cli gem version installed."
+        "itcss version                       | v, -v | Shows itcsscli gem version installed."
       ]
 
       if File.exist?(@ITCSS_CONFIG_FILE)
@@ -226,7 +226,7 @@ module ItcssCli
     end
 
     def itcss_help
-      puts "itcss_cli available commmands:".yellow
+      puts "itcsscli available commmands:".yellow
       puts @ITCSS_COMMANDS_DESCRIPTION.map{|s| s.prepend("  ")}
     end
 
