@@ -28,8 +28,8 @@ module Itcsscli
 
       @ITCSS_COMMANDS_DESCRIPTION = [
         "             COMMAND                  ALIAS                               FUNCTION                                 ",
-        "itcss init                          |       | Initiates itcsscli configuration with a itcss.yml file. [start here]",
-        "itcss install [filenames]           |       | Creates an example of ITCSS structure in path specified in itcss.yml.",
+        "itcss init                          |       | Initiates itcsscli configuration with a #{@ITCSS_CONFIG_FILE} file. [start here]",
+        "itcss install [filenames]           |       | Creates an example of ITCSS structure in path specified in #{@ITCSS_CONFIG_FILE}.",
         "itcss new [module] [filename]       |   n   | Creates a new ITCSS module and automatically import it into imports file.",
         "itcss inuit new [inuit module]      |inuit n| Add specified inuit module as an itcss dependency.",
         "itcss inuit help                    |inuit h| Add specified inuit module as an itcss dependency.",
@@ -113,7 +113,7 @@ module Itcsscli
 
     def itcss_init
       if File.exist?(@ITCSS_CONFIG_FILE)
-        puts "There is already a itcss.yml created.".yellow
+        puts "There is already a #{@ITCSS_CONFIG_FILE} created.".yellow
         puts "Do you want to override it? [ y / n ]"
         user_override_itcss_yml = STDIN.gets.chomp
         unless user_override_itcss_yml == 'y'
@@ -123,7 +123,7 @@ module Itcsscli
 
       init_config = {}
 
-      puts "Well done! Let's configure your itcss.yml:".yellow
+      puts "Well done! Let's configure your #{@ITCSS_CONFIG_FILE}:".yellow
 
       puts "Provide the root folder name where the ITCSS file structure should be built:"
       user_itcss_dir = STDIN.gets.chomp
@@ -240,7 +240,7 @@ module Itcsscli
         puts "There's no #{@ITCSS_CONFIG_FILE} created yet. Run `itcss init` to create it.".red
         abort
       elsif @ITCSS_DIR.nil? || @ITCSS_BASE_FILE.nil?
-        puts "Something is wrong with your itcss.yml file. Please run `itcss init` again to override it.".red
+        puts "Something is wrong with your #{@ITCSS_CONFIG_FILE} file. Please run `itcss init` again to override it.".red
         abort
       end
     end
@@ -276,7 +276,7 @@ module Itcsscli
     # INUIT
     def inuit_command_parser
       if @ITCSS_PACKAGE_MANAGER.nil?
-        puts "You didn't choose a package manager. Please do it in itcss.yml".red
+        puts "You didn't choose a package manager. Please do it in #{@ITCSS_CONFIG_FILE}".red
         abort
       end
 
@@ -360,8 +360,9 @@ module Itcsscli
     end
 
     def inuit_imports_path(filename)
+      @ITCSS_PACKAGE_MANAGER == 'bower' ? package_manager_prefix = 'bower_components' : package_manager_prefix = 'node_modules'
       frags = filename.split(".")
-      "inuit-#{frags[1]}/#{filename}"
+      "#{package_manager_prefix}/inuit-#{frags[1]}/#{filename}"
     end
 
   end
