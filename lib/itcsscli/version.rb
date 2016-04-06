@@ -1,3 +1,3 @@
 module Itcsscli
-  VERSION = "0.1.18"
+  VERSION = "0.1.0"
 end
