@@ -4,7 +4,7 @@ require 'fileutils'
 require 'colorize'
 require 'yaml'
 
-module ItcssCli
+module Itcsscli
   class Core
 
     def initialize

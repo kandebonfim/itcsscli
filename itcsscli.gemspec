@@ -5,7 +5,7 @@ require 'itcsscli/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "itcsscli"
-  spec.version       = ItcssCli::VERSION
+  spec.version       = Itcsscli::VERSION
   spec.authors       = ["Kande Bonfim"]
   spec.email         = ["kandebonfim@gmail.com"]
 

@@ -1,3 +1,3 @@
-module ItcssCli
+module Itcsscli
   VERSION = "0.1.18"
 end
