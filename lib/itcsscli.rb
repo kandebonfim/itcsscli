@@ -105,7 +105,7 @@ module Itcsscli
 
 
       # $ itcss update
-      if ['install', 'new', 'n', 'inuit', 'update', 'u'].include? ARGV[0]
+      if ['install', 'new', 'n', 'update', 'u'].include? ARGV[0]
         itcss_init_checker
         itcss_update_import_file
       end
@@ -294,13 +294,17 @@ module Itcsscli
       elsif ['help', 'h', '-h'].include? ARGV[1]
         inuit_help
       end
+
+      # $ itcss update
+      if ['new', 'n'].include? ARGV[1]
+        itcss_update_import_file
+      end
     end
 
     def inuit_new_module(c_module, file, module_object)
       if file
         current_module_name = inuit_module_fullname(c_module, file)
-        config_file = @ITCSS_CONFIG_FILE
-        current_config = YAML.load_file(config_file)
+        current_config = YAML.load_file(@ITCSS_CONFIG_FILE)
 
         if current_config['inuit_modules'].nil?
           current_config['inuit_modules'] = []
@@ -324,8 +328,9 @@ module Itcsscli
           end
         end
 
+        @INUIT_MODULES = current_config['inuit_modules']
+
         puts "using #{@ITCSS_PACKAGE_MANAGER} to install inuit '#{current_module_name}' dependency...".green
-        sleep(2)
         output = `#{@ITCSS_PACKAGE_MANAGER} install --save #{module_object['slug']}`
         puts output
 
