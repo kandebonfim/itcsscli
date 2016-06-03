@@ -150,7 +150,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 
 ## Development
 ```{r, engine='bash'}
-$ rvm gemset create itcsscli.gemspec && rvm gemset use itcsscli.gemspec
+$ rvm gemset create itcsscli && rvm gemset use itcsscli
 ```
 
 ## License
