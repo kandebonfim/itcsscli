@@ -148,6 +148,10 @@ If you open the ITCSS's base file now, you'll see that all ITCSS modules are aut
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/itcss_cli. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
+## Development
+```{r, engine='bash'}
+$ rvm gemset create itcsscli.gemspec && rvm gemset use itcsscli.gemspec
+```
 
 ## License
 
