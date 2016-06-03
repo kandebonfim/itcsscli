@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'itcss_cli'
+require 'itcsscli'
 
-init = ItcssCli::Core.new
+init = Itcsscli::Core.new
 init.command_parser

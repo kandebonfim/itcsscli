@@ -1,10 +1,10 @@
-require "itcss_cli/version"
+require "itcsscli/version"
 require "erb"
 require 'fileutils'
 require 'colorize'
 require 'yaml'
 
-module ItcssCli
+module Itcsscli
   class Core
 
     def initialize
@@ -28,14 +28,14 @@ module ItcssCli
 
       @ITCSS_COMMANDS_DESCRIPTION = [
         "             COMMAND                  ALIAS                               FUNCTION                                 ",
-        "itcss init                          |       | Initiates itcss_cli configuration with a itcss.yml file. [start here]",
-        "itcss install [filenames]           |       | Creates an example of ITCSS structure in path specified in itcss.yml.",
+        "itcss init                          |       | Initiates itcsscli configuration with a #{@ITCSS_CONFIG_FILE} file. [start here]",
+        "itcss install [filenames]           |       | Creates an example of ITCSS structure in path specified in #{@ITCSS_CONFIG_FILE}.",
         "itcss new [module] [filename]       |   n   | Creates a new ITCSS module and automatically import it into imports file.",
         "itcss inuit new [inuit module]      |inuit n| Add specified inuit module as an itcss dependency.",
         "itcss inuit help                    |inuit h| Add specified inuit module as an itcss dependency.",
         "itcss update                        |   u   | Updates the imports file using the files inside ITCSS structure.",
         "itcss help                          | h, -h | Shows all available itcss commands and it's functions.",
-        "itcss version                       | v, -v | Shows itcss_cli gem version installed."
+        "itcss version                       | v, -v | Shows itcsscli gem version installed."
       ]
 
       if File.exist?(@ITCSS_CONFIG_FILE)
@@ -105,7 +105,7 @@ module ItcssCli
 
 
       # $ itcss update
-      if ['install', 'new', 'n', 'inuit', 'update', 'u'].include? ARGV[0]
+      if ['install', 'new', 'n', 'update', 'u'].include? ARGV[0]
         itcss_init_checker
         itcss_update_import_file
       end
@@ -113,7 +113,7 @@ module ItcssCli
 
     def itcss_init
       if File.exist?(@ITCSS_CONFIG_FILE)
-        puts "There is already a itcss.yml created.".yellow
+        puts "There is already a #{@ITCSS_CONFIG_FILE} created.".yellow
         puts "Do you want to override it? [ y / n ]"
         user_override_itcss_yml = STDIN.gets.chomp
         unless user_override_itcss_yml == 'y'
@@ -123,7 +123,7 @@ module ItcssCli
 
       init_config = {}
 
-      puts "Well done! Let's configure your itcss.yml:".yellow
+      puts "Well done! Let's configure your #{@ITCSS_CONFIG_FILE}:".yellow
 
       puts "Provide the root folder name where the ITCSS file structure should be built:"
       user_itcss_dir = STDIN.gets.chomp
@@ -226,7 +226,7 @@ module ItcssCli
     end
 
     def itcss_help
-      puts "itcss_cli available commmands:".yellow
+      puts "itcsscli available commmands:".yellow
       puts @ITCSS_COMMANDS_DESCRIPTION.map{|s| s.prepend("  ")}
     end
 
@@ -240,7 +240,7 @@ module ItcssCli
         puts "There's no #{@ITCSS_CONFIG_FILE} created yet. Run `itcss init` to create it.".red
         abort
       elsif @ITCSS_DIR.nil? || @ITCSS_BASE_FILE.nil?
-        puts "Something is wrong with your itcss.yml file. Please run `itcss init` again to override it.".red
+        puts "Something is wrong with your #{@ITCSS_CONFIG_FILE} file. Please run `itcss init` again to override it.".red
         abort
       end
     end
@@ -276,7 +276,7 @@ module ItcssCli
     # INUIT
     def inuit_command_parser
       if @ITCSS_PACKAGE_MANAGER.nil?
-        puts "You didn't choose a package manager. Please do it in itcss.yml".red
+        puts "You didn't choose a package manager. Please do it in #{@ITCSS_CONFIG_FILE}".red
         abort
       end
 
@@ -294,13 +294,17 @@ module ItcssCli
       elsif ['help', 'h', '-h'].include? ARGV[1]
         inuit_help
       end
+
+      # $ itcss update
+      if ['new', 'n'].include? ARGV[1]
+        itcss_update_import_file
+      end
     end
 
     def inuit_new_module(c_module, file, module_object)
       if file
         current_module_name = inuit_module_fullname(c_module, file)
-        config_file = @ITCSS_CONFIG_FILE
-        current_config = YAML.load_file(config_file)
+        current_config = YAML.load_file(@ITCSS_CONFIG_FILE)
 
         if current_config['inuit_modules'].nil?
           current_config['inuit_modules'] = []
@@ -324,8 +328,9 @@ module ItcssCli
           end
         end
 
+        @INUIT_MODULES = current_config['inuit_modules']
+
         puts "using #{@ITCSS_PACKAGE_MANAGER} to install inuit '#{current_module_name}' dependency...".green
-        sleep(2)
         output = `#{@ITCSS_PACKAGE_MANAGER} install --save #{module_object['slug']}`
         puts output
 
@@ -360,8 +365,9 @@ module ItcssCli
     end
 
     def inuit_imports_path(filename)
+      @ITCSS_PACKAGE_MANAGER == 'bower' ? package_manager_prefix = 'bower_components' : package_manager_prefix = 'node_modules'
       frags = filename.split(".")
-      "inuit-#{frags[1]}/#{filename}"
+      "#{package_manager_prefix}/inuit-#{frags[1]}/#{filename}"
     end
 
   end
