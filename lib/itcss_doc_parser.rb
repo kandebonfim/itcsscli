@@ -1,6 +1,10 @@
 def initialize_doc
   @ITCSS_MODULES.each do |current_module|
     itcss_module_files = Dir[ File.join("#{@ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
+    if itcss_module_files.kind_of?(Array) && itcss_module_files.any?
+      module_header = construct_module_header current_module
+      @all_files_markup = @all_files_markup.to_s + module_header
+    end
     itcss_module_files.each do |current_file|
       map_file current_file
     end
@@ -94,12 +98,16 @@ def construct_file_markup selector_blocks, file_name
   file_markup
 end
 
+def construct_module_header module_name
+  "<div id='#{module_name}' class='module'>#{module_name}</div>"
+end
+
 def construct_navigation
   @nav = '<div class="nav">'
   @ITCSS_MODULES.each do |current_module|
     itcss_module_files = Dir[ File.join("#{@ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
     if itcss_module_files.kind_of?(Array) && itcss_module_files.any?
-      @nav += "<div class='nav__item js-nav-item'>#{current_module}</div>"
+      @nav += "<a href='##{current_module}' class='nav__item'>#{current_module}</a>"
       itcss_module_files.each do |current_file|
         @nav += "<a href='##{excerpt_filename current_file}' class='nav__item nav__link'>#{excerpt_filename(current_file).split('.')[1]}</a>"
       end
