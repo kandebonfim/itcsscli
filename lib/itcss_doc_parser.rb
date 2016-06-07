@@ -115,9 +115,12 @@ def write_itcss_map_file content, nav
     style = line_break_removal File.open(relative_file_path('../assets/itcss.css')).read
     javascript = line_break_removal File.open(relative_file_path('../assets/itcss.js')).read
 
-    File.open 'index.html', "w+" do |out|
+    FileUtils.mkdir_p @ITCSS_DOC_DIR
+    File.open @ITCSS_DOC_FILE, "w+" do |out|
       out.puts template.result binding
     end
+
+    puts "create #{@ITCSS_DOC_FILE}".green
   end
 end
 

@@ -14,6 +14,8 @@ module Itcsscli
       @ITCSS_MODULE_TEMPLATE = relative_file_path "../templates/itcss_module.erb"
       @ITCSS_APP_TEMPLATE = relative_file_path "../templates/itcss_application.erb"
       @ITCSS_DOC_TEMPLATE = relative_file_path "../templates/itcss_doc.html.erb"
+      @ITCSS_DOC_DIR = 'itcssdoc'
+      @ITCSS_DOC_FILE = "#{@ITCSS_DOC_DIR}/index.html"
       @ITCSS_MODULES = ["requirements", "settings", "tools", "generic", "base", "objects", "components", "trumps"]
       @ITCSS_FILES = {
         "requirements" => "Vendor libraries",
