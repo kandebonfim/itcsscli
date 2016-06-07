@@ -1,0 +1,203 @@
+@import "_syntax"
+
+// Colors
+$color-bg:         #E1DFE1
+$color-blue:       #567FA8
+$color-dark-blue:  #232F42
+$color-gray:       #BCBCBC
+$color-dark-gray:  #6F6F6F
+
+$color-block:      #2196F3
+$color-element:    #9C27B0
+$color-modifier:   #E91E63
+$color-variable:   #e90
+$color-mixin:      #673AB7
+$color-keyframes:  #4CAF50
+$color-unclassed:  #795548
+$color-place-sel:  #3F51B5
+
+// Settings
+$sidebar-width:   260px
+$container-width: 600px
+
+// Resets
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td
+  margin: 0
+  padding: 0
+  border: 0
+  outline: 0
+
+a
+  color: inherit
+  text-decoration: none
+
+// Objects
+body
+  font-family: "Roboto Mono"
+  font-size: 14px
+  background-color: $color-bg
+
+.container
+  max-width: $container-width
+  margin: 60px auto
+  border-radius: 2px
+  transform: translateX($sidebar-width/2)
+  display: flex
+  flex-direction: column
+
+// Sidebar
+.sidebar
+  position: fixed
+  width: $sidebar-width
+  height: 100%
+  top: 0
+  background-color: $color-dark-blue
+  overflow-y: scroll
+
+// Header
+header
+  height: 48px
+  background-color: $color-blue
+  width: 100%
+  top: 0
+  position: absolute
+
+// Logo
+.logo
+  height: 24px
+  top: 12px
+  position: absolute
+  left: 12px
+
+  .sidebar &
+    position: relative
+
+    .logo__cli
+      fill: $color-blue
+
+// Navigation
+.nav
+  position: absolute
+  width: 100%
+  top: 48px
+  bottom: 0
+  padding-bottom: 24px
+  border-top: 1px solid rgba(white, .1)
+  overflow-y: scroll
+
+.nav__item
+  display: block
+  color: white
+  padding: 10px 16px
+  font-weight: 100
+
+.nav__link
+  padding: 6px 16px
+  margin-left: 24px
+  border-left: 4px solid $color-blue
+  transition: border .2s
+  font-size: 12px
+
+  &:hover
+    border-left: 4px solid white
+
+// File
+.file
+  &:before
+    content: attr(id)
+    text-align: right
+    display: block
+    color: $color-dark-gray
+    font-weight: lighter
+
+  & + &
+    margin-top: 20px
+
+.file__content
+  padding: 20px
+  background-color: white
+  border: 1px solid $color-gray
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16)
+  overflow-x: scroll
+
+  .blank_slate
+    font-size: 12px
+    text-align: center
+    color: $color-gray
+
+  pre
+    font-size: 12px
+
+// Markup
+h3:after
+  color: white
+  font-size: 9px
+  padding: 2px 4px
+  border-radius: 4px
+  vertical-align: middle
+
+h3.bl
+  color: $color-block
+
+  &:after
+    content: 'block'
+    background-color: $color-block
+
+h3.el
+  color: $color-element
+
+  &:after
+    content: 'element'
+    background-color: $color-element
+
+h3.md
+  color: $color-modifier
+
+  &:after
+    content: 'modifier'
+    background-color: $color-modifier
+
+h3.va
+  color: $color-variable
+
+  &:after
+    content: 'variable'
+    background-color: $color-variable
+
+h3.mx
+  color: $color-mixin
+
+  &:after
+    content: 'mixin'
+    background-color: $color-mixin
+
+h3.ke
+  color: $color-keyframes
+
+  &:after
+    content: 'keyframes'
+    background-color: $color-keyframes
+
+h3.un
+  color: $color-unclassed
+
+  &:after
+    content: 'unclassed'
+    background-color: $color-unclassed
+
+h3.ps
+  color: $color-place-sel
+
+  &:after
+    content: 'placeholder selector'
+    background-color: $color-place-sel
+
+h3.va
+  font-size: 14px
