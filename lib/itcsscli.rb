@@ -1,4 +1,5 @@
 require "itcsscli/version"
+require "itcss_doc_parser"
 require "erb"
 require 'fileutils'
 require 'colorize'
@@ -12,6 +13,7 @@ module Itcsscli
       @ITCSS_CONFIG_TEMPLATE = relative_file_path "../templates/itcss_config.erb"
       @ITCSS_MODULE_TEMPLATE = relative_file_path "../templates/itcss_module.erb"
       @ITCSS_APP_TEMPLATE = relative_file_path "../templates/itcss_application.erb"
+      @ITCSS_DOC_TEMPLATE = relative_file_path "../templates/itcss_doc.html.erb"
       @ITCSS_MODULES = ["requirements", "settings", "tools", "generic", "base", "objects", "components", "trumps"]
       @ITCSS_FILES = {
         "requirements" => "Vendor libraries",
@@ -24,7 +26,7 @@ module Itcsscli
         "trumps" => "Overrides and helper classes."
       }
 
-      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'inuit', 'update', 'u', 'help', 'h', '-h', 'version', 'v', '-v']
+      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'inuit', 'update', 'u', 'doc', 'help', 'h', '-h', 'version', 'v', '-v']
 
       @ITCSS_COMMANDS_DESCRIPTION = [
         "             COMMAND                  ALIAS                               FUNCTION                                 ",
@@ -92,17 +94,18 @@ module Itcsscli
       elsif 'inuit' == ARGV[0]
         inuit_command_parser
 
-
       # $ itcss help
       elsif ['help', '-h', 'h'].include? ARGV[0]
         itcss_help
 
-
       # $ itcss version
       elsif ['version', '-v', 'v'].include? ARGV[0]
         itcss_version
-      end
 
+      # $ itcss doc
+      elsif 'doc' == ARGV[0]
+        initialize_doc
+      end
 
       # $ itcss update
       if ['install', 'new', 'n', 'update', 'u'].include? ARGV[0]
