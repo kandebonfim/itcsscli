@@ -25,7 +25,7 @@ First, you'll need to set up ITCSS by running:
 ```{r, engine='bash'}
 $ itcss init
 ```
-    
+
 Now go to `itcss.yml` and do your itcss_cli config:
 
 ```yml
@@ -150,7 +150,13 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 
 ## Development
 ```{r, engine='bash'}
+$ bundle
 $ rvm gemset create itcsscli && rvm gemset use itcsscli
+```
+
+To compile sass:
+```
+$ sass --watch assets/itcss.sass:assets/itcss.css --style compressed --sourcemap=none
 ```
 
 ## License
