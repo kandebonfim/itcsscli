@@ -106,6 +106,7 @@ module Itcsscli
 
       # $ itcss doc
       elsif 'doc' == ARGV[0]
+        itcss_init_checker
         initialize_doc
       end
 
