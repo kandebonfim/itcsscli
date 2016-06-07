@@ -110,6 +110,8 @@ header
 
 // File
 .file
+  padding-top: 6px
+
   &:before
     content: attr(id)
     text-align: right
@@ -134,6 +136,22 @@ header
 
   pre
     font-size: 12px
+
+// Module
+.module
+  font-size: 26px
+  line-height: 18px
+  padding: 18px 0 8px
+  margin: 10px 0
+  color: $color-dark-gray
+
+  &:after
+    content: ''
+    position: absolute
+    left: -24px
+    border-style: solid
+    border-width: 10px 0 10px 17.3px
+    border-color: transparent transparent transparent $color-blue
 
 // Markup
 h3:after
@@ -201,3 +219,4 @@ h3.ps
 
 h3.va
   font-size: 14px
+  font-weight: 400
