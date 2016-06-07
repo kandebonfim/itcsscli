@@ -53,6 +53,7 @@ module Itcsscli
       if File.exist?(@ITCSS_CONFIG_FILE) && @ITCSS_CONFIG['package_manager']
         @ITCSS_PACKAGE_MANAGER ||= @ITCSS_CONFIG['package_manager']
         @INUIT_MODULES ||= @ITCSS_CONFIG['inuit_modules']
+        @INUIT_PREFIX ||= @ITCSS_CONFIG['inuit_prefix']
       else
         @ITCSS_PACKAGE_MANAGER = nil
       end
@@ -155,6 +156,7 @@ module Itcsscli
         end
 
         init_config['package_manager'] = user_package_manager
+        init_config['inuit_prefix'] = ''
       end
 
       File.open @ITCSS_CONFIG_TEMPLATE do |io|
@@ -370,9 +372,7 @@ module Itcsscli
     end
 
     def inuit_imports_path(filename)
-      @ITCSS_PACKAGE_MANAGER == 'bower' ? package_manager_prefix = 'bower_components' : package_manager_prefix = 'node_modules'
-      frags = filename.split(".")
-      "#{package_manager_prefix}/inuit-#{frags[1]}/#{filename}"
+      "#{@INUIT_PREFIX}inuit-#{filename.split(".")[1]}/#{filename}"
     end
 
   end
