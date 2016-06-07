@@ -191,7 +191,6 @@ module Itcsscli
 
       file_path = "#{@ITCSS_DIR}/#{type}/_#{type}.#{file}.sass"
       unless File.exist?(file_path)
-        contents = "##{type}.#{file}"
         File.open file_path, "w+" do |out|
           out.puts template.result binding
         end
