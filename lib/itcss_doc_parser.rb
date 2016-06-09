@@ -129,6 +129,8 @@ def write_itcss_map_file content, nav
     end
 
     puts "create #{@ITCSS_DOC_FILE}".green
+    puts "opening #{@ITCSS_DOC_FILE}...".yellow
+    puts `open #{@ITCSS_DOC_FILE}`
   end
 end
 
