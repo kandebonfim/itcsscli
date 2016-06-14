@@ -51,21 +51,23 @@ end
 
 def get_selector_type line
   if line.start_with? '='
-    "mx" # mixin
+    "mixin"
   elsif line.start_with? '$'
-    "va" # variable
+    "variable"
+  elsif line.start_with? '@import'
+    "import"
   elsif line.start_with? '@keyframes'
-    "ke" # keyframe
+    "keyframes"
   elsif line.start_with? '%'
-    "ps" # placeholder selector
+    "placeholder selector"
   elsif !line.include? '.'
-    "un" # unclassed
+    "unclassed"
   elsif line.include? '--'
-    "md" # modifier
+    "modifier"
   elsif line.include? '__'
-    "el" # element
+    "element"
   else
-    "bl" # block
+    "block"
   end
 end
 
@@ -87,7 +89,7 @@ def construct_file_markup selector_blocks, file_name
   if selector_blocks.kind_of?(Array) && selector_blocks.any?
     selector_blocks.each do |selector_block|
       selector_type = get_selector_type selector_block.first
-      file_markup += "<h3 class='#{selector_type}'>#{line_break_string selector_block.shift}</h3>"
+      file_markup += "<h3 data-type='#{selector_type}'>#{line_break_string selector_block.shift}</h3>"
       file_markup += "<pre><code class='language-sass'>#{line_break_array selector_block}</code></pre>"
     end
   else
