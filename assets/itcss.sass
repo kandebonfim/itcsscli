@@ -15,7 +15,8 @@ $c-mixin:      #673AB7
 $c-keyframes:  #4CAF50
 $c-unclassed:  #795548
 $c-place-sel:  #3F51B5
-$c-lines:      (('block', $c-block),('element', $c-element),('modifier', $c-modifier),('variable', $c-variable),('mixin', $c-mixin),('keyframes', $c-keyframes),('unclassed', $c-unclassed),('placeholder-selector', $c-place-sel))
+$c-import:     #03A9F4
+$c-lines:      (('block', $c-block),('element', $c-element),('modifier', $c-modifier),('variable', $c-variable),('mixin', $c-mixin),('keyframes', $c-keyframes),('unclassed', $c-unclassed),('placeholder-selector', $c-place-sel),('import', $c-import))
 
 
 // Settings
@@ -23,7 +24,7 @@ $sidebar-width:   260px
 $container-width: 600px
 
 // Font
-$monospace: "Roboto Mono", Consolas, Monaco, monospace
+$monospace: "Roboto Mono", Monaco, monospace
 
 // Resets
 html, body, div, span, applet, object, iframe,
@@ -175,6 +176,6 @@ h3:after
     &:after
       background-color: nth($c-line,2)
 
-h3[data-type='variable']
+h3[data-type='variable'], h3[data-type='import']
   font-size: 14px
   font-weight: 400
