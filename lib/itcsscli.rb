@@ -28,7 +28,7 @@ module Itcsscli
         "trumps" => "Overrides and helper classes."
       }
 
-      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'inuit', 'update', 'u', 'doc', 'help', 'h', '-h', 'version', 'v', '-v']
+      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'inuit', 'update', 'u', 'doc', 'd', '-d', 'help', 'h', '-h', 'version', 'v', '-v']
 
       @ITCSS_COMMANDS_DESCRIPTION = [
         "             COMMAND                  ALIAS                               FUNCTION                                 ",
@@ -36,7 +36,8 @@ module Itcsscli
         "itcss install [filenames]           |       | Creates an example of ITCSS structure in path specified in #{@ITCSS_CONFIG_FILE}.",
         "itcss new [module] [filename]       |   n   | Creates a new ITCSS module and automatically import it into imports file.",
         "itcss inuit new [inuit module]      |inuit n| Add specified inuit module as an itcss dependency.",
-        "itcss inuit help                    |inuit h| Add specified inuit module as an itcss dependency.",
+        "itcss inuit help                    |inuit h| Shows all available itcss inuit commands and it's functions.",
+        "itcss doc                           | d, -d | Generate and open itcssdoc.",
         "itcss update                        |   u   | Updates the imports file using the files inside ITCSS structure.",
         "itcss help                          | h, -h | Shows all available itcss commands and it's functions.",
         "itcss version                       | v, -v | Shows itcsscli gem version installed."
@@ -106,7 +107,7 @@ module Itcsscli
         itcss_version
 
       # $ itcss doc
-      elsif 'doc' == ARGV[0]
+      elsif ['doc', '-d', 'd'].include? ARGV[0]
         itcss_init_checker
         initialize_doc
       end
