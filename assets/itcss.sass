@@ -1,20 +1,22 @@
 @import "_syntax"
 
 // Colors
-$color-bg:         #E1DFE1
-$color-blue:       #567FA8
-$color-dark-blue:  #232F42
-$color-gray:       #BCBCBC
-$color-dark-gray:  #6F6F6F
+$c-bg:         #E1DFE1
+$c-blue:       #567FA8
+$c-dark-blue:  #232F42
+$c-gray:       #BCBCBC
+$c-dark-gray:  #6F6F6F
 
-$color-block:      #2196F3
-$color-element:    #9C27B0
-$color-modifier:   #E91E63
-$color-variable:   #e90
-$color-mixin:      #673AB7
-$color-keyframes:  #4CAF50
-$color-unclassed:  #795548
-$color-place-sel:  #3F51B5
+$c-block:      #2196F3
+$c-element:    #9C27B0
+$c-modifier:   #E91E63
+$c-variable:   #e90
+$c-mixin:      #673AB7
+$c-keyframes:  #4CAF50
+$c-unclassed:  #795548
+$c-place-sel:  #3F51B5
+$c-lines:      (('block', $c-block),('element', $c-element),('modifier', $c-modifier),('variable', $c-variable),('mixin', $c-mixin),('keyframes', $c-keyframes),('unclassed', $c-unclassed),('placeholder-selector', $c-place-sel))
+
 
 // Settings
 $sidebar-width:   260px
@@ -45,7 +47,7 @@ a
 body
   font-family: $monospace
   font-size: 14px
-  background-color: $color-bg
+  background-color: $c-bg
 
 .container
   max-width: $container-width
@@ -61,13 +63,13 @@ body
   width: $sidebar-width
   height: 100%
   top: 0
-  background-color: $color-dark-blue
+  background-color: $c-dark-blue
   overflow-y: scroll
 
 // Header
 header
   height: 48px
-  background-color: $color-blue
+  background-color: $c-blue
   width: 100%
   top: 0
   position: absolute
@@ -83,7 +85,7 @@ header
     position: relative
 
     .logo__cli
-      fill: $color-blue
+      fill: $c-blue
 
 // Navigation
 .nav
@@ -104,7 +106,7 @@ header
 .nav__link
   padding: 6px 16px
   margin-left: 24px
-  border-left: 4px solid $color-blue
+  border-left: 4px solid $c-blue
   transition: border .2s
   font-size: 12px
 
@@ -119,7 +121,7 @@ header
     content: attr(id)
     text-align: right
     display: block
-    color: $color-dark-gray
+    color: $c-dark-gray
     font-weight: lighter
 
   & + &
@@ -128,14 +130,14 @@ header
 .file__content
   padding: 20px
   background-color: white
-  border: 1px solid $color-gray
+  border: 1px solid $c-gray
   box-shadow: 0 3px 6px rgba(0,0,0,0.16)
   overflow-x: scroll
 
   .blank_slate
     font-size: 12px
     text-align: center
-    color: $color-gray
+    color: $c-gray
 
   pre
     font-size: 12px
@@ -145,7 +147,7 @@ header
   font-size: 26px
   line-height: 18px
   padding: 18px 0 8px
-  color: $color-dark-gray
+  color: $c-dark-gray
 
   &:after
     content: ''
@@ -153,7 +155,7 @@ header
     left: -24px
     border-style: solid
     border-width: 10px 0 10px 17.3px
-    border-color: transparent transparent transparent $color-blue
+    border-color: transparent transparent transparent $c-blue
 
   .file + &
     margin-top: 30px
@@ -165,63 +167,14 @@ h3:after
   padding: 2px 4px
   border-radius: 4px
   vertical-align: middle
+  content: attr(data-type)
 
-h3.bl
-  color: $color-block
+@each $c-line in $c-lines
+  h3[data-type="#{nth($c-line,1)}"]
+    color: nth($c-line,2)
+    &:after
+      background-color: nth($c-line,2)
 
-  &:after
-    content: 'block'
-    background-color: $color-block
-
-h3.el
-  color: $color-element
-
-  &:after
-    content: 'element'
-    background-color: $color-element
-
-h3.md
-  color: $color-modifier
-
-  &:after
-    content: 'modifier'
-    background-color: $color-modifier
-
-h3.va
-  color: $color-variable
-
-  &:after
-    content: 'variable'
-    background-color: $color-variable
-
-h3.mx
-  color: $color-mixin
-
-  &:after
-    content: 'mixin'
-    background-color: $color-mixin
-
-h3.ke
-  color: $color-keyframes
-
-  &:after
-    content: 'keyframes'
-    background-color: $color-keyframes
-
-h3.un
-  color: $color-unclassed
-
-  &:after
-    content: 'unclassed'
-    background-color: $color-unclassed
-
-h3.ps
-  color: $color-place-sel
-
-  &:after
-    content: 'placeholder selector'
-    background-color: $color-place-sel
-
-h3.va
+h3[data-type='variable']
   font-size: 14px
   font-weight: 400
