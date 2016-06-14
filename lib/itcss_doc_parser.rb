@@ -1,4 +1,6 @@
 def initialize_doc
+  puts 'parsing your files...'.yellow
+
   @ITCSS_MODULES.each do |current_module|
     itcss_module_files = Dir[ File.join("#{@ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
     if itcss_module_files.kind_of?(Array) && itcss_module_files.any?
@@ -130,6 +132,7 @@ def write_itcss_map_file content, nav
       out.puts template.result binding
     end
 
+    puts "The documentation has been successfully generated.".green
     puts "create #{@ITCSS_DOC_FILE}".green
     puts "opening #{@ITCSS_DOC_FILE}...".yellow
     puts `open #{@ITCSS_DOC_FILE}`
