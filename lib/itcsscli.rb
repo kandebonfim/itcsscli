@@ -1,8 +1,14 @@
 require "itcsscli/version"
 require "erb"
-require 'fileutils'
 require 'colorize'
 require 'yaml'
+require 'readline'
+
+# autocomplete config
+Readline.completion_append_character = ""
+Readline.completion_proc = Proc.new do |str|
+  Dir[str + '*'].grep( /^#{Regexp.escape(str)}/ )
+end
 
 module Itcsscli
   class Core
@@ -114,8 +120,8 @@ module Itcsscli
     def itcss_init
       if File.exist?(@ITCSS_CONFIG_FILE)
         puts "There is already a #{@ITCSS_CONFIG_FILE} created.".yellow
-        puts "Do you want to override it? [ y / n ]"
-        user_override_itcss_yml = STDIN.gets.chomp
+        puts "Do you want to override it?"
+        user_override_itcss_yml = Readline.readline '[ y / n ] > '
         unless user_override_itcss_yml == 'y'
           abort
         end
@@ -126,22 +132,22 @@ module Itcsscli
       puts "Well done! Let's configure your #{@ITCSS_CONFIG_FILE}:".yellow
 
       puts "Provide the root folder name where the ITCSS file structure should be built:"
-      user_itcss_dir = STDIN.gets.chomp
+      user_itcss_dir = Readline.readline '> '
       init_config['stylesheets_directory'] = user_itcss_dir
 
-      puts "What is the name of your base sass file (all ITCSS modules will be imported into it):"
-      user_itcss_base_file = STDIN.gets.chomp
+      puts "What is the name of your base sass file? (all ITCSS modules will be imported into it)"
+      user_itcss_base_file = Readline.readline '> '
       init_config['stylesheets_import_file'] = user_itcss_base_file
 
-      puts "Are you using a package manager? [ y / n ]"
-      user_itcss_package_manager = STDIN.gets.chomp
+      puts "Are you using a package manager?"
+      user_itcss_package_manager = Readline.readline '[ y / n ] > '
       if user_itcss_package_manager == 'y'
         user_package_manager = true
       end
 
       if user_package_manager == true
-        puts "Choose your package manager [ bower / npm ]:"
-        user_package_manager = STDIN.gets.chomp
+        puts "Choose your package manager:"
+        user_package_manager = Readline.readline '[ bower / npm ] > '
 
         unless ['bower', 'npm'].include? user_package_manager
           puts "#{user_package_manager} is not a valid package manager".red
