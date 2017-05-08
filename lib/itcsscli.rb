@@ -216,7 +216,7 @@ module Itcsscli
         end
 
         itcss_module_files = Dir[ File.join("#{@ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
-        itcss_files_to_import[current_module] += itcss_module_files.map{|s| s.gsub("#{@ITCSS_DIR}/", '')}
+        itcss_files_to_import[current_module] += itcss_module_files.map{|s| s.gsub("#{@ITCSS_DIR}/", '').gsub(".sass", '')}
       end
 
       file_path = "#{@ITCSS_DIR}/#{@ITCSS_BASE_FILE}.sass"
