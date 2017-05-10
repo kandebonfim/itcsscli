@@ -4,6 +4,7 @@ require "erb"
 require 'colorize'
 require 'yaml'
 require 'readline'
+require 'fileutils'
 
 # autocomplete config
 Readline.completion_append_character = ""
