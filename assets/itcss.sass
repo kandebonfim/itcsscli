@@ -1,0 +1,181 @@
+@import "_syntax"
+
+// Colors
+$c-bg:         #E1DFE1
+$c-blue:       #567FA8
+$c-dark-blue:  #232F42
+$c-gray:       #BCBCBC
+$c-dark-gray:  #6F6F6F
+
+$c-block:      #2196F3
+$c-element:    #9C27B0
+$c-modifier:   #E91E63
+$c-variable:   #e90
+$c-mixin:      #673AB7
+$c-keyframes:  #4CAF50
+$c-unclassed:  #795548
+$c-place-sel:  #3F51B5
+$c-import:     #03A9F4
+$c-lines:      (('block', $c-block),('element', $c-element),('modifier', $c-modifier),('variable', $c-variable),('mixin', $c-mixin),('keyframes', $c-keyframes),('unclassed', $c-unclassed),('placeholder-selector', $c-place-sel),('import', $c-import))
+
+
+// Settings
+$sidebar-width:   260px
+$container-width: 600px
+
+// Font
+$monospace: "Roboto Mono", Monaco, monospace
+
+// Resets
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td
+  margin: 0
+  padding: 0
+  border: 0
+  outline: 0
+
+a
+  color: inherit
+  text-decoration: none
+
+// Objects
+body
+  font-family: $monospace
+  font-size: 14px
+  background-color: $c-bg
+
+.container
+  max-width: $container-width
+  margin: 60px auto
+  border-radius: 2px
+  transform: translateX($sidebar-width/2)
+  display: flex
+  flex-direction: column
+
+// Sidebar
+.sidebar
+  position: fixed
+  width: $sidebar-width
+  height: 100%
+  top: 0
+  background-color: $c-dark-blue
+  overflow-y: scroll
+
+// Header
+header
+  height: 48px
+  background-color: $c-blue
+  width: 100%
+  top: 0
+  position: absolute
+
+// Logo
+.logo
+  height: 24px
+  top: 12px
+  position: absolute
+  left: 12px
+
+  .sidebar &
+    position: relative
+
+    .logo__cli
+      fill: $c-blue
+
+// Navigation
+.nav
+  position: absolute
+  width: 100%
+  top: 48px
+  bottom: 0
+  padding-bottom: 24px
+  border-top: 1px solid rgba(white, .1)
+  overflow-y: scroll
+
+.nav__item
+  display: block
+  color: white
+  padding: 10px 16px
+  font-weight: 100
+
+.nav__link
+  padding: 6px 16px
+  margin-left: 24px
+  border-left: 4px solid $c-blue
+  transition: border .2s
+  font-size: 12px
+
+  &:hover
+    border-left: 4px solid white
+
+// File
+.file
+  padding-top: 6px
+
+  &:before
+    content: attr(id)
+    text-align: right
+    display: block
+    color: $c-dark-gray
+    font-weight: lighter
+
+  & + &
+    margin-top: 20px
+
+.file__content
+  padding: 20px
+  background-color: white
+  border: 1px solid $c-gray
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16)
+  overflow-x: scroll
+
+  .blank_slate
+    font-size: 12px
+    text-align: center
+    color: $c-gray
+
+  pre
+    font-size: 12px
+
+// Module
+.module
+  font-size: 26px
+  line-height: 18px
+  padding: 18px 0 8px
+  color: $c-dark-gray
+
+  &:after
+    content: ''
+    position: absolute
+    left: -24px
+    border-style: solid
+    border-width: 10px 0 10px 17.3px
+    border-color: transparent transparent transparent $c-blue
+
+  .file + &
+    margin-top: 30px
+
+// Markup
+h3:after
+  color: white
+  font-size: 9px
+  padding: 2px 4px
+  border-radius: 4px
+  vertical-align: middle
+  content: attr(data-type)
+
+@each $c-line in $c-lines
+  h3[data-type="#{nth($c-line,1)}"]
+    color: nth($c-line,2)
+    &:after
+      background-color: nth($c-line,2)
+
+h3[data-type='variable'], h3[data-type='import']
+  font-size: 14px
+  font-weight: 400

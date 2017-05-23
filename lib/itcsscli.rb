@@ -1,4 +1,5 @@
 require "itcsscli/version"
+require "itcss_doc_parser"
 require "erb"
 require 'colorize'
 require 'yaml'
@@ -19,6 +20,9 @@ module Itcsscli
       @ITCSS_CONFIG_TEMPLATE = relative_file_path "../templates/itcss_config.erb"
       @ITCSS_MODULE_TEMPLATE = relative_file_path "../templates/itcss_module.erb"
       @ITCSS_APP_TEMPLATE = relative_file_path "../templates/itcss_application.erb"
+      @ITCSS_DOC_TEMPLATE = relative_file_path "../templates/itcss_doc.html.erb"
+      @ITCSS_DOC_DIR = 'itcssdoc'
+      @ITCSS_DOC_FILE = "#{@ITCSS_DOC_DIR}/index.html"
       @ITCSS_MODULES = ["requirements", "settings", "tools", "generic", "base", "objects", "components", "trumps"]
       @ITCSS_FILES = {
         "requirements" => "Vendor libraries",
@@ -31,7 +35,7 @@ module Itcsscli
         "trumps" => "Overrides and helper classes."
       }
 
-      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'inuit', 'update', 'u', 'help', 'h', '-h', 'version', 'v', '-v']
+      @ITCSS_COMMANDS = ['init', 'install', 'new', 'n', 'inuit', 'update', 'u', 'doc', 'd', '-d', 'help', 'h', '-h', 'version', 'v', '-v']
 
       @ITCSS_COMMANDS_DESCRIPTION = [
         "             COMMAND                  ALIAS                               FUNCTION                                 ",
@@ -39,7 +43,8 @@ module Itcsscli
         "itcss install [filenames]           |       | Creates an example of ITCSS structure in path specified in #{@ITCSS_CONFIG_FILE}.",
         "itcss new [module] [filename]       |   n   | Creates a new ITCSS module and automatically import it into imports file.",
         "itcss inuit new [inuit module]      |inuit n| Add specified inuit module as an itcss dependency.",
-        "itcss inuit help                    |inuit h| Add specified inuit module as an itcss dependency.",
+        "itcss inuit help                    |inuit h| Shows all available itcss inuit commands and it's functions.",
+        "itcss doc                           | d, -d | Generate and open itcssdoc.",
         "itcss update                        |   u   | Updates the imports file using the files inside ITCSS structure.",
         "itcss help                          | h, -h | Shows all available itcss commands and it's functions.",
         "itcss version                       | v, -v | Shows itcsscli gem version installed."
@@ -56,6 +61,7 @@ module Itcsscli
       if File.exist?(@ITCSS_CONFIG_FILE) && @ITCSS_CONFIG['package_manager']
         @ITCSS_PACKAGE_MANAGER ||= @ITCSS_CONFIG['package_manager']
         @INUIT_MODULES ||= @ITCSS_CONFIG['inuit_modules']
+        @INUIT_PREFIX ||= @ITCSS_CONFIG['inuit_prefix']
       else
         @ITCSS_PACKAGE_MANAGER = nil
       end
@@ -99,17 +105,19 @@ module Itcsscli
       elsif 'inuit' == ARGV[0]
         inuit_command_parser
 
-
       # $ itcss help
       elsif ['help', '-h', 'h'].include? ARGV[0]
         itcss_help
 
-
       # $ itcss version
       elsif ['version', '-v', 'v'].include? ARGV[0]
         itcss_version
-      end
 
+      # $ itcss doc
+      elsif ['doc', '-d', 'd'].include? ARGV[0]
+        itcss_init_checker
+        initialize_doc
+      end
 
       # $ itcss update
       if ['install', 'new', 'n', 'update', 'u'].include? ARGV[0]
@@ -156,6 +164,7 @@ module Itcsscli
         end
 
         init_config['package_manager'] = user_package_manager
+        init_config['inuit_prefix'] = ''
       end
 
       File.open @ITCSS_CONFIG_TEMPLATE do |io|
@@ -193,7 +202,6 @@ module Itcsscli
 
       file_path = "#{@ITCSS_DIR}/#{type}/_#{type}.#{file}.sass"
       unless File.exist?(file_path)
-        contents = "##{type}.#{file}"
         File.open file_path, "w+" do |out|
           out.puts template.result binding
         end
@@ -216,7 +224,7 @@ module Itcsscli
         end
 
         itcss_module_files = Dir[ File.join("#{@ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
-        itcss_files_to_import[current_module] += itcss_module_files.map{|s| s.gsub("#{@ITCSS_DIR}/", '').gsub(".sass", '')}
+        itcss_files_to_import[current_module] += itcss_module_files.map{|s| s.gsub("#{@ITCSS_DIR}/", '').gsub(".sass", '').gsub("_", '')}
       end
 
       file_path = "#{@ITCSS_DIR}/#{@ITCSS_BASE_FILE}.sass"
@@ -372,9 +380,7 @@ module Itcsscli
     end
 
     def inuit_imports_path(filename)
-      @ITCSS_PACKAGE_MANAGER == 'bower' ? package_manager_prefix = 'bower_components' : package_manager_prefix = 'node_modules'
-      frags = filename.split(".")
-      "#{package_manager_prefix}/inuit-#{frags[1]}/#{filename}"
+      "#{@INUIT_PREFIX}inuit-#{filename.split(".")[1]}/#{filename}"
     end
 
   end
