@@ -1,2 +1,2 @@
 <%= "/// @group #{type}" %>
-<%= "/// @name #{file}" %><%= type == "components" ? "\n\n.#{file}" : '' %>
+<%= "/// @name #{file}" %><%= type == "components" ? "\n\n.#{file}" : '' %><%= type == "components" && @ITCSS_EXTENSION == 'scss' ? "{\n  \n}" : '' %>

@@ -54,6 +54,7 @@ module Itcsscli
         @ITCSS_CONFIG = YAML.load_file(@ITCSS_CONFIG_FILE)
         @ITCSS_DIR ||= @ITCSS_CONFIG['stylesheets_directory']
         @ITCSS_BASE_FILE ||= @ITCSS_CONFIG['stylesheets_import_file']
+        @ITCSS_EXTENSION ||= @ITCSS_CONFIG['extension']
       else
         @ITCSS_CONFIG = nil
       end
@@ -148,6 +149,10 @@ module Itcsscli
       user_itcss_base_file = Readline.readline '> '
       init_config['stylesheets_import_file'] = user_itcss_base_file
 
+      puts "What extension do you want to use? (sass or scss)"
+      user_itcss_base_file_extension = Readline.readline '> '
+      init_config['extension'] = user_itcss_base_file_extension
+
       puts "Are you using a package manager?"
       user_itcss_package_manager = Readline.readline '[ y / n ] > '
       if user_itcss_package_manager == 'y'
@@ -200,7 +205,7 @@ module Itcsscli
       FileUtils.mkdir_p "#{@ITCSS_DIR}/#{type}"
       FileUtils.chmod "u=wrx,go=rx", @ITCSS_DIR
 
-      file_path = "#{@ITCSS_DIR}/#{type}/_#{type}.#{file}.sass"
+      file_path = "#{@ITCSS_DIR}/#{type}/_#{type}.#{file}.#{@ITCSS_EXTENSION}"
       unless File.exist?(file_path)
         File.open file_path, "w+" do |out|
           out.puts template.result binding
@@ -224,11 +229,11 @@ module Itcsscli
         end
 
         itcss_module_files = Dir[ File.join("#{@ITCSS_DIR}/#{current_module}/", '**', '*') ].reject { |p| File.directory? p }
-        itcss_files_to_import[current_module] += itcss_module_files.map{|s| s.gsub("#{@ITCSS_DIR}/", '').gsub(".sass", '').gsub("_", '')}
+        itcss_files_to_import[current_module] += itcss_module_files.map{|s| s.gsub("#{@ITCSS_DIR}/", '').gsub(".#{@ITCSS_EXTENSION}", '').gsub("_", '')}
       end
 
-      file_path = "#{@ITCSS_DIR}/#{@ITCSS_BASE_FILE}.sass"
-      contents = "#{@ITCSS_BASE_FILE}.sass"
+      file_path = "#{@ITCSS_DIR}/#{@ITCSS_BASE_FILE}.#{@ITCSS_EXTENSION}"
+      contents = "#{@ITCSS_BASE_FILE}.#{@ITCSS_EXTENSION}"
       File.open @ITCSS_APP_TEMPLATE do |io|
         template = ERB.new io.read
 
